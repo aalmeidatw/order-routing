@@ -54,9 +54,13 @@ France Mouse 2
 
 DHL, None
 Keyboard 2
+
+
 Output
 
 Brazil Keyboard 2
+
+=====================================
 Test Case #2 - Shipping method
 
 Input
@@ -69,6 +73,8 @@ Mouse 1
 Output
 
 South Africa Mouse 1
+
+=====================================
 Test Case #3 - Capacity
 
 Input
@@ -85,6 +91,9 @@ Output
 Canada Mouse 4
 Canada Keyboard 1
 France Keyboard 2
+
+=====================================
+
 Test Case #4 - Prioritize by largest inventory
 
 Input
@@ -98,10 +107,13 @@ France Keyboard 2
 DHL, LargestInventory
 Mouse 1
 Keyboard 1
+
 Output
 
 Brazil Mouse 1
 Brazil Keyboard 1
+
+=====================================
 Test Case #5 - Prioritize by shortest inventory
 
 Input
@@ -114,10 +126,13 @@ France Keyboard 2
 DHL, ShortestInventory
 Mouse 1
 Keyboard 1
+
 Output
 
 China Mouse 1
 France Keyboard 1
+
+=====================================
 Test Case #5 - Prioritize by largest capacity
 
 Input
@@ -130,10 +145,13 @@ France Keyboard 2
 DHL, LargestCapacity
 Mouse 1
 Keyboard 1
+
 Output
 
 China Mouse 1
 Brazil Keyboard 1
+
+=====================================
 Test Case #6 - Many Products
 
 Input
@@ -151,6 +169,7 @@ Mouse 6
 Keyboard 3
 Monitor 3
 Camera 1
+
 Output
 
 Canada Mouse 2
@@ -159,6 +178,8 @@ Brazil Keyboard 3
 South Africa Mouse 2
 South Africa Monitor 3
 South Africa Camera 1
+
+=====================================
 Test Case #7 - Invalid
 
 Input
