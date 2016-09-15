@@ -1,0 +1,33 @@
+package resource;
+
+import model.Shipping;
+import model.Warehouse;
+import org.junit.Test;
+import java.util.List;
+import static java.util.Arrays.asList;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
+
+
+public class ResourceTest {
+    private Resource resource = new Resource();
+    private static List<Shipping> BRAZIL_SHIPPING = asList(new Shipping("DHL"), new Shipping("FEDEX"));
+    private static List<Shipping> FRANCE_SHIPPING = asList(new Shipping("DHL"), new Shipping("FEDEX"), new Shipping("UPS"));
+    private static List<Shipping> SOUTH_AFRICA_SHIPPING = asList(new Shipping("DHL"));
+    private static List<Shipping> CHINA_SHIPPING = asList(new Shipping("DHL"));
+    private static List<Shipping> CANADA_SHIPPING = asList(new Shipping("FEDEX"));
+
+    private static Warehouse BRAZIL_WAREHOUSE = new Warehouse("BRAZIL", BRAZIL_SHIPPING, 15);
+    private static Warehouse FRANCE_WAREHOUSE = new Warehouse("BRAZIL", FRANCE_SHIPPING, 10);
+    private static Warehouse SOUTH_AFRICA_WAREHOUSE = new Warehouse("SOUTH AFRICA", SOUTH_AFRICA_SHIPPING, 10);
+    private static Warehouse CHINA_WAREHOUSE = new Warehouse("SOUTH AFRICA", CHINA_SHIPPING, 20);
+    private static Warehouse CANADA_WAREHOUSE = new Warehouse("CANADA", CANADA_SHIPPING, 5);
+
+    @Test
+    public void shouldCreateWarehouseList() throws Exception {this.resource = new Resource();
+        List<Warehouse> expected = asList(BRAZIL_WAREHOUSE, FRANCE_WAREHOUSE, SOUTH_AFRICA_WAREHOUSE, CHINA_WAREHOUSE, CANADA_WAREHOUSE);
+
+        List<Warehouse> actual = resource.getWarehouseResource();
+        assertThat(actual, is(expected));
+    }
+}
