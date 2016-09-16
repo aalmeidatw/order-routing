@@ -1,4 +1,4 @@
-package resource;
+package repository;
 
 import model.Shipping;
 import model.Warehouse;
@@ -9,8 +9,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 
-public class ResourceTest {
-    private Resource resource = new Resource();
+public class RepositoryTest {
+    private Repository repository = new Repository();
     private static List<Shipping> BRAZIL_SHIPPING = asList(new Shipping("DHL"), new Shipping("FEDEX"));
     private static List<Shipping> FRANCE_SHIPPING = asList(new Shipping("DHL"), new Shipping("FEDEX"), new Shipping("UPS"));
     private static List<Shipping> SOUTH_AFRICA_SHIPPING = asList(new Shipping("DHL"));
@@ -24,10 +24,10 @@ public class ResourceTest {
     private static Warehouse CANADA_WAREHOUSE = new Warehouse("CANADA", CANADA_SHIPPING, 5);
 
     @Test
-    public void shouldCreateWarehouseList() throws Exception {this.resource = new Resource();
+    public void shouldCreateWarehouseList() throws Exception {this.repository = new Repository();
         List<Warehouse> expected = asList(BRAZIL_WAREHOUSE, FRANCE_WAREHOUSE, SOUTH_AFRICA_WAREHOUSE, CHINA_WAREHOUSE, CANADA_WAREHOUSE);
 
-        List<Warehouse> actual = resource.getWarehouseResource();
+        List<Warehouse> actual = repository.getWarehouseRepository();
         assertThat(actual, is(expected));
     }
 }

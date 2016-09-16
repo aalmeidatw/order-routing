@@ -1,4 +1,4 @@
-package resource;
+package repository;
 
 
 import lombok.Value;
@@ -8,7 +8,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 @Value
-public class Resource {
+public class Repository {
     private static List<Shipping> BRAZIL_SHIPPING = asList(new Shipping("DHL"), new Shipping("FEDEX"));
     private static List<Shipping> FRANCE_SHIPPING = asList(new Shipping("DHL"), new Shipping("FEDEX"), new Shipping("UPS"));
     private static List<Shipping> SOUTH_AFRICA_SHIPPING = asList(new Shipping("DHL"));
@@ -22,7 +22,7 @@ public class Resource {
     private static Warehouse CANADA_WAREHOUSE = new Warehouse("CANADA", CANADA_SHIPPING, 5);
 
 
-    public static List<Warehouse> getWarehouseResource (){
+    public static List<Warehouse> getWarehouseRepository(){
         return asList(BRAZIL_WAREHOUSE, FRANCE_WAREHOUSE, SOUTH_AFRICA_WAREHOUSE, CHINA_WAREHOUSE, CANADA_WAREHOUSE);
     }
 }

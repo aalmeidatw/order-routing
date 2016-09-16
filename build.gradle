@@ -18,6 +18,10 @@ repositories {
     jcenter()
 }
 
+task(integration_test) << {
+    println "hello"
+}
+
 // In this section you declare the dependencies for your production and test code
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.14'
