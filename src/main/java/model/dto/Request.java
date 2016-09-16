@@ -14,4 +14,15 @@ public class Request {
     private List <Warehouse> warehouseList;
     private ShippingMethod shippingMethodMethod;
     private Strategy strategy;
+
+    public Request(List<InventoryItem> inventoryItems,
+                   List<Warehouse> warehouseList,
+                   ShippingMethod shippingMethodMethod,
+                   Strategy strategy) {
+
+        this.inventoryItems = inventoryItems;
+        this.warehouseList = warehouseList;
+        this.shippingMethodMethod = shippingMethodMethod;
+        this.strategy = strategy;
+    }
 }
