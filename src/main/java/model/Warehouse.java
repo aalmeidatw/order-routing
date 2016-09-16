@@ -8,12 +8,12 @@ import java.util.List;
 @Value
 public class Warehouse {
     private String warehouseName;
-    private List<Shipping> shippingList;
+    private List<ShippingMethod> shippingMethodList;
     private int capacity;
 
-    public Warehouse(String warehouseName, List<Shipping> shippingList, int capacity) {
+    public Warehouse(String warehouseName, List<ShippingMethod> shippingMethodList, int capacity) {
         this.warehouseName = warehouseName;
-        this.shippingList = shippingList;
+        this.shippingMethodList = shippingMethodList;
         this.capacity = capacity;
     }
 }
