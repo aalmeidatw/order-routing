@@ -1,4 +1,4 @@
-package model.dto;
+package algorithm.dto;
 
 import lombok.Getter;
 import lombok.Value;

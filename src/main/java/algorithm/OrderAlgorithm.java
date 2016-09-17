@@ -2,8 +2,8 @@ package algorithm;
 
 
 import model.InventoryItem;
-import model.dto.Request;
-import model.dto.Response;
+import algorithm.dto.Request;
+import algorithm.dto.Response;
 
 import static java.util.Arrays.asList;
 
