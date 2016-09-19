@@ -1,8 +1,8 @@
 package acceptance;
 
-
 import algorithm.OrderAlgorithm;
 import model.InventoryItem;
+import model.OrderItem;
 import model.ShippingMethod;
 import model.dto.Request;
 import model.dto.Response;
@@ -17,7 +17,6 @@ import static org.junit.Assert.assertThat;
 public class AcceptanceTests {
     private OrderAlgorithm orderAlgorithm;
 
-
     @Before
     public void setUp() throws Exception {
         this.orderAlgorithm = new OrderAlgorithm();
@@ -26,12 +25,13 @@ public class AcceptanceTests {
     @Test
     public void standardCase() throws Exception {
 
-        Request request = new Request( asList(
-                new InventoryItem("Brazil", "Keyboard", 2),
-                new InventoryItem("France", "Mouse", 2)),
+        Request request = new Request(asList(
+                                            new InventoryItem("Brazil", "Keyboard", 2),
+                                            new InventoryItem("France", "Mouse", 2)),
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.DHL,
-                new NoneStrategy());
+                asList( new OrderItem("Keyboard",2)),
+                        new NoneStrategy());
 
         Response expected = new Response(asList(new InventoryItem("Brazil", "Keyboard" , 2)));
 
