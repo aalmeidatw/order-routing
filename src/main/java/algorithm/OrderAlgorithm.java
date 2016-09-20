@@ -3,6 +3,7 @@ package algorithm;
 
 import model.InventoryItem;
 import model.OrderItem;
+import model.Warehouse;
 import model.dto.Request;
 import model.dto.Response;
 import model.filter.FilterShippingMethod;
@@ -24,6 +25,14 @@ public class OrderAlgorithm {
         Map<String, Integer> requestListMap = request.getOrderItemsList()
                 .stream()
                 .collect(Collectors.toMap(OrderItem::getProductName, OrderItem::getQuantityNeeded));
+
+
+        Map<String, Integer> capacityMap = request.getWarehouseList()
+                .stream()
+                .collect(Collectors.toMap(Warehouse::getWarehouseName, Warehouse::getCapacity));
+
+        System.out.print(capacityMap.toString());
+
 
         List<InventoryItem> shipping = new ArrayList<>();
 

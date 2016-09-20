@@ -55,4 +55,27 @@ public class AcceptanceTests {
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
+
+    @Test
+    public void capacityCase() throws Exception {
+
+        Request request = new Request(asList(
+                new InventoryItem("Canada", "Mouse", 4),
+                new InventoryItem("Canada", "Keyboard", 3),
+                new InventoryItem("France", "Keyboard", 2)),
+                new Repository().getWarehouseRepository(),
+                ShippingMethod.FEDEX,
+                asList( new OrderItem("Mouse",4), new OrderItem("Keyboard", 3)),
+                new NoneStrategy());
+
+        Response expected = new Response(asList(new InventoryItem("Canada", "Mouse", 4),
+                new InventoryItem("Canada", "Keyboard", 1),
+                new InventoryItem("France", "Keyboard", 2)));
+
+        Response response = orderAlgorithm.execute(request);
+        assertThat(response, is(expected));
+
+
+
+    }
 }
