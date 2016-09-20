@@ -5,6 +5,7 @@ import lombok.Value;
 import model.InventoryItem;
 import model.ShippingMethod;
 import model.Warehouse;
+import model.dto.Request;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,13 +14,13 @@ import java.util.stream.Collectors;
 public class FilterShippingMethod {
 
 
-    public List<InventoryItem> getInventoryShippingMethodRequest(List<InventoryItem> inventoryItemList,
-                                                                 ShippingMethod shippingMethod,
-                                                                 List<Warehouse> warehouseList){
+    public List<InventoryItem> getInventoryShippingMethodRequest(Request request){
 
 
-        return inventoryItemList.stream()
-                                .filter(inventoryItem -> isShippingMethodIsSuported(inventoryItem, shippingMethod, warehouseList))
+        return request.getInventoryItems().stream()
+                                .filter(inventoryItem -> isShippingMethodIsSuported(inventoryItem,
+                                        request.getShippingMethodMethod(),
+                                        request.getWarehouseList()))
                                 .collect(Collectors.toList());
 
      }

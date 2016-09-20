@@ -1,10 +1,15 @@
 package model.filter;
 
 import model.InventoryItem;
+import model.OrderItem;
 import model.ShippingMethod;
 import model.Warehouse;
+import model.dto.Request;
 import org.junit.Before;
 import org.junit.Test;
+import repository.Repository;
+import strategy.NoneStrategy;
+
 import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -31,7 +36,15 @@ public class FilterShippingMethodTest {
     @Test
     public void shouldReturnBrazilInventoryItemWhenUpsShippingMethodIsPassed() throws Exception {
 
-        List<InventoryItem> response = filterShippingMethod.getInventoryShippingMethodRequest(asList(inventoryItem), shippingMethodUPS, asList(brazilWarehouse, chileWarehouse));
+        Request request = new Request(asList(
+                new InventoryItem("BRAZIL", "Mouse", 2)),
+                asList(brazilWarehouse, chileWarehouse),
+                ShippingMethod.UPS,
+                asList( null, null),
+                new NoneStrategy());
+
+
+        List<InventoryItem> response = filterShippingMethod.getInventoryShippingMethodRequest(request);
 
         List<InventoryItem> actual = asList(inventoryItem);
 

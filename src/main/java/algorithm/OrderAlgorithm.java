@@ -28,10 +28,7 @@ public class OrderAlgorithm {
 
         Map<String, Integer> capacityListMap = capacityMap.getCapacityList(request);
 
-        List<InventoryItem> inventoryItemListFiltred = filterShippingMethod.getInventoryShippingMethodRequest(
-                request.getInventoryItems(),
-                request.getShippingMethodMethod(),
-                request.getWarehouseList());
+        List<InventoryItem> inventoryItemListFiltred = filterShippingMethod.getInventoryShippingMethodRequest(request);
 
         List<InventoryItem> shipping = new ArrayList<>();
 
