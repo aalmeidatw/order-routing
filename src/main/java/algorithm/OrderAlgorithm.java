@@ -20,42 +20,42 @@ public class OrderAlgorithm {
     private RequestListMap requestMap = new RequestListMap();
     private CapacityListMap capacityMap = new CapacityListMap();
 
-
-
     public Response execute(Request request){
-
         Map<String, Integer> requestListMap = requestMap.getRequestList(request);
-
         Map<String, Integer> capacityListMap = capacityMap.getCapacityList(request);
-
         List<InventoryItem> inventoryItemListFiltred = filterShippingMethod.getInventoryShippingMethodRequest(request);
-
         List<InventoryItem> shipping = new ArrayList<>();
 
         for (OrderItem item : request.getOrderItemsList()) {
 
             for (InventoryItem inventory : inventoryItemListFiltred) {
 
-                if (isSameProductNameAndQuantityNeededIsMoreThanZero(requestListMap, item, inventory)) {
+                if (isSameProductNameAndQuantityNeededIsMoreThanZero(requestListMap, item, inventory, capacityListMap)) {
 
-                    int minValue = Math.min(requestListMap.get(item.getProductName()), inventory.getQuantityAvailable() );
+                    // TODO : aqui verifivar capacidade (LOGICA)
+                    int valueToInsertInShippingList = Math.min(requestListMap.get(item.getProductName()), inventory.getQuantityAvailable() );
+
+
                     int neededQuantity = requestListMap.get(item.getProductName()) - inventory.getQuantityAvailable();
 
-                    insertNewValueInRequestMap(requestListMap, item, Math.max(0, neededQuantity));
-                    shipping.add(new InventoryItem(inventory.getWarehouseName(), inventory.getProductName(), minValue));
+                    insertNewValueInRequestMap(requestListMap, capacityListMap, inventory, item, Math.max(0, neededQuantity), valueToInsertInShippingList);
+                    shipping.add(new InventoryItem(inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
                 }
             }
         }
         return new Response(shipping);
     }
 
-    private void insertNewValueInRequestMap(Map<String, Integer> requestListMap, OrderItem item, int value) {
-        requestListMap.put(item.getProductName(), value);
+    private void insertNewValueInRequestMap(Map<String, Integer> requestListMap, Map<String, Integer> capacityListMap, InventoryItem inventoryItem, OrderItem item, int neededQuantity, int value) {
+        requestListMap.put(item.getProductName(), neededQuantity);
+        capacityListMap.put(inventoryItem.getWarehouseName().toUpperCase(), capacityListMap.get(inventoryItem.getWarehouseName().toUpperCase()) - value );
+
     }
 
-    private boolean isSameProductNameAndQuantityNeededIsMoreThanZero(Map<String, Integer> requestListMap, OrderItem item, InventoryItem inventory) {
+    private boolean isSameProductNameAndQuantityNeededIsMoreThanZero(Map<String, Integer> requestListMap, OrderItem item, InventoryItem inventory, Map<String, Integer> capacityListMap) {
         return inventory.getProductName().equals(item.getProductName())
-                && (requestListMap.get(item.getProductName()) > 0);
+                && (requestListMap.get(item.getProductName()) > 0)
+                && (capacityListMap.get(inventory.getWarehouseName().toUpperCase())>= 0 );
     }
 
 }

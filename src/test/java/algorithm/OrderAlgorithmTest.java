@@ -5,15 +5,12 @@ import model.OrderItem;
 import model.ShippingMethod;
 import model.dto.Request;
 import model.dto.Response;
-import org.hamcrest.core.Is;
 import org.junit.Test;
 import repository.Repository;
 import strategy.NoneStrategy;
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
-
 
 public class OrderAlgorithmTest {
     private OrderAlgorithm orderAlgorithm = new OrderAlgorithm();

@@ -69,13 +69,10 @@ public class AcceptanceTests {
                 new NoneStrategy());
 
         Response expected = new Response(asList(new InventoryItem("Canada", "Mouse", 4),
-                new InventoryItem("Canada", "Keyboard", 1),
-                new InventoryItem("France", "Keyboard", 2)));
+                    new InventoryItem("Canada", "Keyboard", 1),
+                    new InventoryItem("France", "Keyboard", 2)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
-
-
-
     }
 }

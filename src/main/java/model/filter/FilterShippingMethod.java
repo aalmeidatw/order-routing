@@ -13,16 +13,12 @@ import java.util.stream.Collectors;
 @Value
 public class FilterShippingMethod {
 
-
     public List<InventoryItem> getInventoryShippingMethodRequest(Request request){
-
-
         return request.getInventoryItems().stream()
                                 .filter(inventoryItem -> isShippingMethodIsSuported(inventoryItem,
                                         request.getShippingMethodMethod(),
                                         request.getWarehouseList()))
                                 .collect(Collectors.toList());
-
      }
 
     protected boolean isShippingMethodIsSuported(InventoryItem inventoryItem,

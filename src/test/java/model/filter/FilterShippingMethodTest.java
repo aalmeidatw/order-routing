@@ -22,7 +22,6 @@ public class FilterShippingMethodTest {
     private Warehouse brazilWarehouse;
     private Warehouse chileWarehouse;
 
-
     @Before
     public void setUp() throws Exception {
         this.filterShippingMethod = new FilterShippingMethod();
