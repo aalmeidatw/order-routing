@@ -2,6 +2,7 @@ package algorithm;
 
 
 import model.InventoryItem;
+import model.Map.CapacityListMap;
 import model.Map.RequestListMap;
 import model.OrderItem;
 import model.Warehouse;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class OrderAlgorithm {
     private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
     private RequestListMap requestMap = new RequestListMap();
+    private CapacityListMap capacityMap = new CapacityListMap();
 
 
 
@@ -24,17 +26,14 @@ public class OrderAlgorithm {
 
         Map<String, Integer> requestListMap = requestMap.getRequestList(request);
 
-
-        Map<String, Integer> capacityMap = request.getWarehouseList()
-                .stream()
-                .collect(Collectors.toMap(Warehouse::getWarehouseName, Warehouse::getCapacity));
-
-        List<InventoryItem> shipping = new ArrayList<>();
+        Map<String, Integer> capacityListMap = capacityMap.getCapacityList(request);
 
         List<InventoryItem> inventoryItemListFiltred = filterShippingMethod.getInventoryShippingMethodRequest(
                 request.getInventoryItems(),
                 request.getShippingMethodMethod(),
                 request.getWarehouseList());
+
+        List<InventoryItem> shipping = new ArrayList<>();
 
         for (OrderItem item : request.getOrderItemsList()) {
 
