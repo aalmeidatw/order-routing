@@ -1,6 +1,7 @@
 package repository;
 
 
+import lombok.Getter;
 import lombok.Value;
 import model.ShippingMethod;
 import model.Warehouse;
@@ -8,6 +9,7 @@ import java.util.List;
 import static java.util.Arrays.asList;
 
 @Value
+@Getter
 public class Repository {
     private static List<ShippingMethod> BRAZIL_SHIPPING_METHOD = asList(ShippingMethod.DHL, ShippingMethod.FEDEX);
     private static List<ShippingMethod> FRANCE_SHIPPING_METHOD = asList(ShippingMethod.DHL, ShippingMethod.FEDEX, ShippingMethod.UPS);

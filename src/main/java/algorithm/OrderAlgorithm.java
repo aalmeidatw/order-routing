@@ -5,6 +5,7 @@ import model.InventoryItem;
 import model.OrderItem;
 import model.dto.Request;
 import model.dto.Response;
+import model.filter.FilterShippingMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,9 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.asList;
 
 public class OrderAlgorithm {
+    private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
+
+
 
     public Response execute(Request request){
 
@@ -23,9 +27,14 @@ public class OrderAlgorithm {
 
         List<InventoryItem> shipping = new ArrayList<>();
 
+        List<InventoryItem> inventoryItemListFiltred = filterShippingMethod.getInventoryShippingMethodRequest(
+                request.getInventoryItems(),
+                request.getShippingMethodMethod(),
+                request.getWarehouseList());
+
         for (OrderItem item : request.getOrderItemsList()) {
 
-            for (InventoryItem inventory : request.getInventoryItems()) {
+            for (InventoryItem inventory : inventoryItemListFiltred) {
 
                 if (isSameProductNameAndQuantityNeededIsMoreThanZero(requestListMap, item, inventory)) {
 
@@ -45,7 +54,8 @@ public class OrderAlgorithm {
     }
 
     private boolean isSameProductNameAndQuantityNeededIsMoreThanZero(Map<String, Integer> requestListMap, OrderItem item, InventoryItem inventory) {
-        return inventory.getProductName().equals(item.getProductName()) && (requestListMap.get(item.getProductName()) > 0);
+        return inventory.getProductName().equals(item.getProductName())
+                && (requestListMap.get(item.getProductName()) > 0);
     }
 
 }

@@ -3,6 +3,7 @@ package model;
 import lombok.Getter;
 import lombok.Value;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Value
@@ -16,4 +17,5 @@ public class Warehouse {
         this.shippingMethodList = shippingMethodList;
         this.capacity = capacity;
     }
+
 }

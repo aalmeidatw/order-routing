@@ -27,8 +27,8 @@ public class RepositoryTest {
     @Test
     public void shouldCreateWarehouseList() throws Exception {this.repository = new Repository();
         List<Warehouse> expected = asList(BRAZIL_WAREHOUSE, FRANCE_WAREHOUSE, SOUTH_AFRICA_WAREHOUSE, CHINA_WAREHOUSE, CANADA_WAREHOUSE);
-
         List<Warehouse> actual = repository.getWarehouseRepository();
+
         assertThat(actual, is(expected));
     }
 }
