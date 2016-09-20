@@ -2,6 +2,7 @@ package algorithm;
 
 
 import model.InventoryItem;
+import model.Map.RequestListMap;
 import model.OrderItem;
 import model.Warehouse;
 import model.dto.Request;
@@ -13,26 +14,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static java.util.Arrays.asList;
-
 public class OrderAlgorithm {
     private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
+    private RequestListMap requestMap = new RequestListMap();
 
 
 
     public Response execute(Request request){
 
-        Map<String, Integer> requestListMap = request.getOrderItemsList()
-                .stream()
-                .collect(Collectors.toMap(OrderItem::getProductName, OrderItem::getQuantityNeeded));
+        Map<String, Integer> requestListMap = requestMap.getRequestList(request);
 
 
         Map<String, Integer> capacityMap = request.getWarehouseList()
                 .stream()
                 .collect(Collectors.toMap(Warehouse::getWarehouseName, Warehouse::getCapacity));
-
-        System.out.print(capacityMap.toString());
-
 
         List<InventoryItem> shipping = new ArrayList<>();
 
