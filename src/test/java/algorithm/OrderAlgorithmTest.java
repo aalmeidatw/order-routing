@@ -5,6 +5,9 @@ import model.OrderItem;
 import model.ShippingMethod;
 import model.dto.Request;
 import model.dto.Response;
+import model.filter.FilterShippingMethod;
+import model.map.CapacityListMap;
+import model.map.RequestListMap;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
@@ -18,13 +21,16 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class OrderAlgorithmTest {
-    private OrderAlgorithm orderAlgorithm = new OrderAlgorithm();
+    private OrderAlgorithm orderAlgorithm;
     private Map<String, Integer> capacityMap = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
-        capacityMap.put("CANADA", 5);
+        this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
+                new RequestListMap(),
+                new CapacityListMap());
 
+        this.capacityMap.put("CANADA", 5);
     }
 
     @Test

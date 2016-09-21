@@ -6,6 +6,9 @@ import model.OrderItem;
 import model.ShippingMethod;
 import model.dto.Request;
 import model.dto.Response;
+import model.filter.FilterShippingMethod;
+import model.map.CapacityListMap;
+import model.map.RequestListMap;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
@@ -20,7 +23,9 @@ public class AcceptanceTests {
 
     @Before
     public void setUp() throws Exception {
-        this.orderAlgorithm = new OrderAlgorithm();
+        this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
+                new RequestListMap(),
+                new CapacityListMap());
     }
 
     @Test

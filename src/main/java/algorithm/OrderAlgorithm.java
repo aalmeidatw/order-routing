@@ -1,6 +1,7 @@
 package algorithm;
 
 
+import lombok.Value;
 import model.InventoryItem;
 import model.map.CapacityListMap;
 import model.map.RequestListMap;
@@ -12,10 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Value
 public class OrderAlgorithm {
-    private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
-    private RequestListMap requestMap = new RequestListMap();
-    private CapacityListMap capacityMap = new CapacityListMap();
+    private FilterShippingMethod filterShippingMethod;
+    private RequestListMap requestMap;
+    private CapacityListMap capacityMap;
+
 
     public Response execute(Request request){
         Map<String, Integer> requestListMap = requestMap.getRequestList(request);
