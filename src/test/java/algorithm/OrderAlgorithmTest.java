@@ -57,4 +57,11 @@ public class OrderAlgorithmTest {
         int quantityNeeded = 7;
         assertThat(orderAlgorithm.getMaxCapacity(canadaWareHouse, quantityNeeded ), is (5));
     }
+
+    @Test
+    public void shoudlReturnQuantityNeededThenWarehouseCapacityIsMoreThanQuantityNeeded() throws Exception {
+        Warehouse canadaWareHouse = new Warehouse("Canada", asList(ShippingMethod.DHL), 5);
+        int quantityNeeded = 3;
+        assertThat(orderAlgorithm.getMaxCapacity(canadaWareHouse, quantityNeeded ), is (quantityNeeded));
+    }
 }
