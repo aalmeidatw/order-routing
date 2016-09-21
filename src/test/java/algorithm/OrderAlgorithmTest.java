@@ -3,9 +3,9 @@ package algorithm;
 import model.InventoryItem;
 import model.OrderItem;
 import model.ShippingMethod;
-import model.Warehouse;
 import model.dto.Request;
 import model.dto.Response;
+import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
 import strategy.NoneStrategy;
@@ -20,6 +20,12 @@ import static org.junit.Assert.*;
 public class OrderAlgorithmTest {
     private OrderAlgorithm orderAlgorithm = new OrderAlgorithm();
     private Map<String, Integer> capacityMap = new HashMap<>();
+
+    @Before
+    public void setUp() throws Exception {
+        capacityMap.put("CANADA", 5);
+
+    }
 
     @Test
     public void shouldReturnBrazilCountryWhenKeyboardProductIsPassed() throws Exception {
@@ -57,18 +63,16 @@ public class OrderAlgorithmTest {
     }
 
     @Test
-    public void shouldReturnMaxCapacityOfWarehouseThenQuantityNeededIsMoreThanWarehouseCapacity() throws Exception {
-        capacityMap.put("CANADA", 5);
+    public void shouldSubtractQuantityNeededAndReturnOneValue() throws Exception {
 
-        int quantityNeeded = 7;
-        assertThat(orderAlgorithm.getMaxCapacity(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (5));
+        int quantityNeeded = 4;
+        assertThat(orderAlgorithm.getNewCapacityValue(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (1));
     }
 
     @Test
-    public void shouldReturnQuantityNeededThenWarehouseCapacityIsMoreThanQuantityNeeded() throws Exception {
-        capacityMap.put("CANADA", 5);
+    public void shouldReturnZeroWhenQuantityNeededIsMoreThanCapacityValue() throws Exception {
 
-        int quantityNeeded = 3;
-        assertThat(orderAlgorithm.getMaxCapacity(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (3));
+        int quantityNeeded = 7;
+        assertThat(orderAlgorithm.getNewCapacityValue(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (0));
     }
 }

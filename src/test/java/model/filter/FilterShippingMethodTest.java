@@ -1,15 +1,12 @@
 package model.filter;
 
 import model.InventoryItem;
-import model.OrderItem;
 import model.ShippingMethod;
 import model.Warehouse;
 import model.dto.Request;
 import org.junit.Before;
 import org.junit.Test;
-import repository.Repository;
 import strategy.NoneStrategy;
-
 import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -42,16 +39,14 @@ public class FilterShippingMethodTest {
                 asList( null, null),
                 new NoneStrategy());
 
-
         List<InventoryItem> response = filterShippingMethod.getInventoryShippingMethodRequest(request);
-
         List<InventoryItem> actual = asList(inventoryItem);
 
         assertThat(actual, is(response));
      }
 
     @Test
-    public void shouldTestIfIsShippingMethodSuportedPassedInventoryName() throws Exception {
+    public void shouldTestIfIsShippingMethodIsSupportedPassedInventoryName() throws Exception {
 
         assertTrue(filterShippingMethod.isShippingMethodIsSuported(inventoryItem, shippingMethodUPS.UPS, asList(brazilWarehouse, chileWarehouse)));
     }
