@@ -2,10 +2,9 @@ package algorithm;
 
 
 import model.InventoryItem;
-import model.Map.CapacityListMap;
-import model.Map.RequestListMap;
+import model.map.CapacityListMap;
+import model.map.RequestListMap;
 import model.OrderItem;
-import model.Warehouse;
 import model.dto.Request;
 import model.dto.Response;
 import model.filter.FilterShippingMethod;
@@ -13,7 +12,6 @@ import model.filter.FilterShippingMethod;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class OrderAlgorithm {
     private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
