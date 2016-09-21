@@ -9,6 +9,7 @@ import model.OrderItem;
 import model.dto.Request;
 import model.dto.Response;
 import model.filter.FilterShippingMethod;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,7 @@ public class OrderAlgorithm {
 
                 if (isSameProductNameAndQuantityNeededIsMoreThanZero(requestListMap, item, inventory, capacityListMap)) {
 
-
                     int valueToInsertInShippingList = Math.min(requestListMap.get(item.getProductName()), inventory.getQuantityAvailable() );
-
 
                     int neededQuantity = requestListMap.get(item.getProductName()) - inventory.getQuantityAvailable();
 
@@ -57,7 +56,8 @@ public class OrderAlgorithm {
                 && (capacityListMap.get(inventory.getWarehouseName().toUpperCase())>= 0 );
     }
 
-    public int getMaxCapacity(Warehouse warehouse, int quantityNeeded) {
-        return Math.min(warehouse.getCapacity(), quantityNeeded);
+    public int getMaxCapacity(InventoryItem  inventory, Map<String, Integer> capacityListMap,  int quantityNeeded) {
+        int capacityValue = capacityListMap.get(inventory.getWarehouseName().toUpperCase());
+        return Math.min(capacityValue, quantityNeeded);
     }
 }

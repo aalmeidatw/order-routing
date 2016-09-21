@@ -17,6 +17,7 @@ import static org.junit.Assert.assertThat;
 public class AcceptanceTests {
     private OrderAlgorithm orderAlgorithm;
 
+
     @Before
     public void setUp() throws Exception {
         this.orderAlgorithm = new OrderAlgorithm();

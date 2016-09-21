@@ -9,12 +9,17 @@ import model.dto.Response;
 import org.junit.Test;
 import repository.Repository;
 import strategy.NoneStrategy;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class OrderAlgorithmTest {
     private OrderAlgorithm orderAlgorithm = new OrderAlgorithm();
+    private Map<String, Integer> capacityMap = new HashMap<>();
 
     @Test
     public void shouldReturnBrazilCountryWhenKeyboardProductIsPassed() throws Exception {
@@ -52,16 +57,18 @@ public class OrderAlgorithmTest {
     }
 
     @Test
-    public void shoudlReturnMaxCapacityOfWarehouseThenQuantityNeededIsMoreThanWarehouseCapacity() throws Exception {
-        Warehouse canadaWareHouse = new Warehouse("Canada", asList(ShippingMethod.DHL), 5);
+    public void shouldReturnMaxCapacityOfWarehouseThenQuantityNeededIsMoreThanWarehouseCapacity() throws Exception {
+        capacityMap.put("CANADA", 5);
+
         int quantityNeeded = 7;
-        assertThat(orderAlgorithm.getMaxCapacity(canadaWareHouse, quantityNeeded ), is (5));
+        assertThat(orderAlgorithm.getMaxCapacity(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (5));
     }
 
     @Test
-    public void shoudlReturnQuantityNeededThenWarehouseCapacityIsMoreThanQuantityNeeded() throws Exception {
-        Warehouse canadaWareHouse = new Warehouse("Canada", asList(ShippingMethod.DHL), 5);
+    public void shouldReturnQuantityNeededThenWarehouseCapacityIsMoreThanQuantityNeeded() throws Exception {
+        capacityMap.put("CANADA", 5);
+
         int quantityNeeded = 3;
-        assertThat(orderAlgorithm.getMaxCapacity(canadaWareHouse, quantityNeeded ), is (quantityNeeded));
+        assertThat(orderAlgorithm.getMaxCapacity(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (3));
     }
 }
