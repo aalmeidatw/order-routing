@@ -2,6 +2,7 @@ package algorithm;
 
 
 import model.InventoryItem;
+import model.Warehouse;
 import model.map.CapacityListMap;
 import model.map.RequestListMap;
 import model.OrderItem;
@@ -30,7 +31,7 @@ public class OrderAlgorithm {
 
                 if (isSameProductNameAndQuantityNeededIsMoreThanZero(requestListMap, item, inventory, capacityListMap)) {
 
-                    // TODO : aqui verifivar capacidade (LOGICA)
+
                     int valueToInsertInShippingList = Math.min(requestListMap.get(item.getProductName()), inventory.getQuantityAvailable() );
 
 
@@ -56,4 +57,7 @@ public class OrderAlgorithm {
                 && (capacityListMap.get(inventory.getWarehouseName().toUpperCase())>= 0 );
     }
 
+    public int getMaxCapacity(Warehouse warehouse, int quantityNeeded) {
+        return Math.min(warehouse.getCapacity(), quantityNeeded);
+    }
 }

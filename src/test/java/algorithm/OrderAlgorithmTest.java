@@ -3,6 +3,7 @@ package algorithm;
 import model.InventoryItem;
 import model.OrderItem;
 import model.ShippingMethod;
+import model.Warehouse;
 import model.dto.Request;
 import model.dto.Response;
 import org.junit.Test;
@@ -50,4 +51,10 @@ public class OrderAlgorithmTest {
         assertThat(actual, is(expected));
     }
 
+    @Test
+    public void shoudlReturnMaxCapacityOfWarehouseThenQuantityNeededIsMoreThanWarehouseCapacity() throws Exception {
+        Warehouse canadaWareHouse = new Warehouse("Canada", asList(ShippingMethod.DHL), 5);
+        int quantityNeeded = 7;
+        assertThat(orderAlgorithm.getMaxCapacity(canadaWareHouse, quantityNeeded ), is (5));
+    }
 }
