@@ -19,7 +19,7 @@ public class LargestStrategyTest {
     @Test
     public void shouldReturnInventoryListThenBrazilIsLargeUnits() throws Exception {
 
-        List<InventoryItem> actual = largestStrategy.execute(asList(CHINA_MOUSE_4,
+        List<InventoryItem> actual = largestStrategy.executeStrategy(asList(CHINA_MOUSE_4,
                 BRAZIL_MOUSE_3,
                 BRAZIL_KEYBOARD_3,
                 FRANCE_MOUSE_2,

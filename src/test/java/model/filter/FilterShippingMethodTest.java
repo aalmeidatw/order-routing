@@ -39,7 +39,7 @@ public class FilterShippingMethodTest {
                 asList( null, null),
                 new NoneStrategy());
 
-        List<InventoryItem> response = filterShippingMethod.getInventoryShippingMethodRequest(request);
+        List<InventoryItem> response = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
         List<InventoryItem> actual = asList(inventoryItem);
 
         assertThat(actual, is(response));

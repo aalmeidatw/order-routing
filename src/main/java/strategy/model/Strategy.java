@@ -7,5 +7,5 @@ import model.Warehouse;
 import java.util.List;
 
 public interface Strategy {
-    List<InventoryItem> execute(List<InventoryItem> inventoryItems);
+    List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems);
 }

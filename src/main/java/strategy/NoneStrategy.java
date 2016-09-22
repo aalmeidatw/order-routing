@@ -9,7 +9,7 @@ import java.util.List;
 public class NoneStrategy implements Strategy {
 
     @Override
-    public List<InventoryItem> execute(List<InventoryItem> inventoryItems) {
+    public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
         return inventoryItems;
     }
 }

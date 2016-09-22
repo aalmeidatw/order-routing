@@ -9,6 +9,8 @@ import model.OrderItem;
 import model.dto.Request;
 import model.dto.Response;
 import model.filter.FilterShippingMethod;
+import strategy.model.Strategy;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +25,7 @@ public class OrderAlgorithm {
     public Response execute(Request request){
         Map<String, Integer> requestListMap = requestMap.getRequestList(request);
         Map<String, Integer> capacityListMap = capacityMap.getCapacityList(request);
-        List<InventoryItem> inventoryItemListFiltred = filterShippingMethod.getInventoryShippingMethodRequest(request);
+        List<InventoryItem> inventoryItemListFiltred = getFiltredInventoryList(request);
         List<InventoryItem> shipping = new ArrayList<>();
 
         for (OrderItem item : request.getOrderItemsList()) {
@@ -50,6 +52,13 @@ public class OrderAlgorithm {
             }
         }
         return new Response(shipping);
+    }
+
+    private List<InventoryItem> getFiltredInventoryList(Request request){
+        Strategy strategy = request.getStrategy();
+        List<InventoryItem> inventoryListFiltredByShippingMethod = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
+
+        return strategy.executeStrategy(inventoryListFiltredByShippingMethod);
     }
 
     private void insertNewValueInRequestMap(Map<String, Integer> requestListMap, Map<String, Integer> capacityListMap,

@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 @Value
 public class FilterShippingMethod {
 
-    public List<InventoryItem> getInventoryShippingMethodRequest(Request request){
+    public List<InventoryItem> getInventoryListFiltredByShippingMethodRequest(Request request){
+
         return request.getInventoryItems().stream()
                                 .filter(inventoryItem -> isShippingMethodIsSuported(inventoryItem,
                                         request.getShippingMethodMethod(),
@@ -24,10 +25,8 @@ public class FilterShippingMethod {
     protected boolean isShippingMethodIsSuported(InventoryItem inventoryItem,
                                            ShippingMethod shippingMethod,
                                            List<Warehouse> warehouseList) {
-
         return warehouseList.stream()
                             .anyMatch(warehouse ->  (warehouse.getWarehouseName().equals(inventoryItem.getWarehouseName().toUpperCase()) &&
                                                     (warehouse.getShippingMethodList().contains(shippingMethod))));
-
     }
 }

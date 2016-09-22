@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 public class LargestStrategy implements Strategy {
 
     @Override
-    public List<InventoryItem> execute(List<InventoryItem> inventoryItems) {
+    public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
 
         Map<String, Integer> groupCapacity = inventoryItems
                 .stream()

@@ -12,6 +12,7 @@ import model.map.RequestListMap;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
+import strategy.LargestStrategy;
 import strategy.NoneStrategy;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -77,6 +78,27 @@ public class AcceptanceTests {
         Response expected = new Response(asList(new InventoryItem("Canada", "Mouse", 4),
                     new InventoryItem("Canada", "Keyboard", 1),
                     new InventoryItem("France", "Keyboard", 2)));
+
+        Response response = orderAlgorithm.execute(request);
+        assertThat(response, is(expected));
+    }
+
+    @Test
+    public void largestInventoryCase() throws Exception {
+
+        Request request = new Request(asList(
+                new InventoryItem("China", "Mouse", 4),
+                new InventoryItem("Brazil", "Mouse", 3),
+                new InventoryItem("Brazil", "Keyboard", 3),
+                new InventoryItem("France", "Mouse", 2),
+                new InventoryItem("France", "Keyboard", 2)),
+                new Repository().getWarehouseRepository(),
+                ShippingMethod.DHL,
+                asList( new OrderItem("Mouse",1), new OrderItem("Keyboard", 1)),
+                new LargestStrategy());
+
+        Response expected = new Response(asList(new InventoryItem("Brazil", "Mouse", 1),
+                new InventoryItem("Brazil", "Keyboard", 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
