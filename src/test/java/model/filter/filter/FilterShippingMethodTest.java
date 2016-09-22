@@ -1,9 +1,10 @@
-package model.filter;
+package model.filter.filter;
 
 import model.InventoryItem;
 import model.ShippingMethod;
 import model.Warehouse;
 import model.dto.Request;
+import model.filter.FilterShippingMethod;
 import org.junit.Before;
 import org.junit.Test;
 import strategy.NoneStrategy;
@@ -13,7 +14,6 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
 
 public class FilterShippingMethodTest {
-    private ShippingMethod  shippingMethodUPS;
     private FilterShippingMethod filterShippingMethod;
     private InventoryItem inventoryItem;
     private Warehouse brazilWarehouse;
@@ -22,7 +22,6 @@ public class FilterShippingMethodTest {
     @Before
     public void setUp() throws Exception {
         this.filterShippingMethod = new FilterShippingMethod();
-        this.shippingMethodUPS = ShippingMethod.UPS;
 
         this.inventoryItem = new InventoryItem("BRAZIL", "Mouse", 2);
         this.brazilWarehouse = new Warehouse("BRAZIL", asList(ShippingMethod.UPS, ShippingMethod.FEDEX), 10);
@@ -44,10 +43,4 @@ public class FilterShippingMethodTest {
 
         assertThat(actual, is(response));
      }
-
-    @Test
-    public void shouldTestIfIsShippingMethodIsSupportedPassedInventoryName() throws Exception {
-
-        assertTrue(filterShippingMethod.isShippingMethodIsSuported(inventoryItem, shippingMethodUPS.UPS, asList(brazilWarehouse, chileWarehouse)));
-    }
 }

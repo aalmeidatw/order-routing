@@ -21,7 +21,6 @@ public class OrderAlgorithm {
     private RequestListMap requestMap;
     private CapacityListMap capacityMap;
 
-
     public Response execute(Request request){
         Map<String, Integer> requestListMap = requestMap.getRequestList(request);
         Map<String, Integer> capacityListMap = capacityMap.getCapacityList(request);
@@ -46,7 +45,7 @@ public class OrderAlgorithm {
 
                     int newCapacity = getNewCapacityValue(inventory, capacityListMap, valueToInsertInShippingList);
 
-                    insertNewValueInRequestMap(requestListMap, capacityListMap, inventory, item, Math.max(0, neededQuantity), newCapacity);
+                    updateRequestAndCapacityMap(requestListMap, capacityListMap, inventory, item, Math.max(0, neededQuantity), newCapacity);
                     shipping.add(new InventoryItem(inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
                 }
             }
@@ -61,9 +60,9 @@ public class OrderAlgorithm {
         return strategy.executeStrategy(inventoryListFiltredByShippingMethod);
     }
 
-    private void insertNewValueInRequestMap(Map<String, Integer> requestListMap, Map<String, Integer> capacityListMap,
-                                            InventoryItem inventoryItem, OrderItem item,
-                                            int neededQuantity, int newCapacity) {
+    protected void updateRequestAndCapacityMap(Map<String, Integer> requestListMap, Map<String, Integer> capacityListMap,
+                                             InventoryItem inventoryItem, OrderItem item,
+                                             int neededQuantity, int newCapacity) {
 
         requestListMap.put(item.getProductName(), neededQuantity);
         capacityListMap.put(inventoryItem.getWarehouseName().toUpperCase(), newCapacity );

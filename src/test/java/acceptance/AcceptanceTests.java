@@ -14,6 +14,8 @@ import org.junit.Test;
 import repository.Repository;
 import strategy.LargestStrategy;
 import strategy.NoneStrategy;
+import strategy.ShortestStrategy;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -99,6 +101,26 @@ public class AcceptanceTests {
 
         Response expected = new Response(asList(new InventoryItem("Brazil", "Mouse", 1),
                 new InventoryItem("Brazil", "Keyboard", 1)));
+
+        Response response = orderAlgorithm.execute(request);
+        assertThat(response, is(expected));
+    }
+
+    @Test
+    public void shortestInventoryCase() throws Exception {
+
+        Request request = new Request(asList(
+                new InventoryItem("China", "Mouse", 4),
+                new InventoryItem("Brazil", "Mouse", 3),
+                new InventoryItem("Brazil", "Keyboard", 3),
+                new InventoryItem("France", "Keyboard", 2)),
+                new Repository().getWarehouseRepository(),
+                ShippingMethod.DHL,
+                asList( new OrderItem("Mouse",1), new OrderItem("Keyboard", 1)),
+                new ShortestStrategy());
+
+        Response expected = new Response(asList(new InventoryItem("China", "Mouse", 1),
+                new InventoryItem("France", "Keyboard", 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));

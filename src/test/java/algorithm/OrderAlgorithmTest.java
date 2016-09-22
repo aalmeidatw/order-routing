@@ -12,10 +12,8 @@ import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
 import strategy.NoneStrategy;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
