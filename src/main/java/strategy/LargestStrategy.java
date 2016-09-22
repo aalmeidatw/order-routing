@@ -5,7 +5,6 @@ import model.InventoryItem;
 import strategy.model.Strategy;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Value
 public class LargestStrategy implements Strategy {
@@ -18,12 +17,10 @@ public class LargestStrategy implements Strategy {
                 .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,
                             Collectors.summingInt(InventoryItem::getQuantityAvailable)));
 
-        Map<String, Integer> orderListMap = orderByValue(groupByCapacity);
-        System.out.print(orderListMap.toString());
+        Map<String, Integer> orderListMap = orderByMoreUnits(groupByCapacity);
 
         return createListOrganizerByLargeUnits(inventoryItems, orderListMap);
     }
-
 
     private List<InventoryItem> createListOrganizerByLargeUnits(List<InventoryItem> inventoryItems, Map<String, Integer> orderListMap){
 
@@ -45,13 +42,13 @@ public class LargestStrategy implements Strategy {
         return inventoryListOrganizer;
     }
 
-    private static <K extends Comparable<? super K>, V> Map<K, V> orderByValue(Map<K, V> groupByCapacityMap) {
+    private Map<String, Integer> orderByMoreUnits(Map<String, Integer> groupCapacity) {
+        Map<String, Integer> orderedList = new LinkedHashMap<>();
 
-        Map<K, V> orderResult = new LinkedHashMap<>();
-        Stream<Map.Entry<K, V>> list = groupByCapacityMap.entrySet().stream();
+        groupCapacity.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .forEachOrdered(x -> orderedList.put(x.getKey(), x.getValue()));
 
-                list.sorted(Map.Entry.comparingByKey())
-                                     .forEachOrdered(order -> orderResult.put(order.getKey(), order.getValue()));
-        return orderResult;
+        return orderedList;
     }
 }
