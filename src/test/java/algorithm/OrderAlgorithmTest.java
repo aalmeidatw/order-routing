@@ -3,6 +3,7 @@ package algorithm;
 import model.InventoryItem;
 import model.OrderItem;
 import model.ShippingMethod;
+import model.WarehouseFulfill;
 import model.dto.Request;
 import model.dto.Response;
 import model.filter.FilterShippingMethod;
@@ -14,16 +15,21 @@ import repository.Repository;
 import strategy.NoneStrategy;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class OrderAlgorithmTest {
     private OrderAlgorithm orderAlgorithm;
+    private RequestListMap requestListMap;
     private Map<String, Integer> capacityMap = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
+        this.requestListMap = new RequestListMap();
+
         this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
                 new RequestListMap(),
                 new CapacityListMap());
@@ -41,9 +47,9 @@ public class OrderAlgorithmTest {
                 asList( new OrderItem("Keyboard",2)),
                 new NoneStrategy());
 
-        Response expected = new Response(asList(new InventoryItem("Brazil", "Keyboard" , 2)));
+        Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
 
-        Response response = orderAlgorithm.execute(request);
+        Response response = orderAlgorithm.execute(request, requestListMap);
         assertThat(response, is(expected));
     }
 
@@ -60,8 +66,8 @@ public class OrderAlgorithmTest {
                         new OrderItem("Monitor", 6)),
                 new NoneStrategy());
 
-        Response actual = orderAlgorithm.execute(request);
-        Response expected = new Response(asList(new InventoryItem("Brazil", "Mouse", 2), new InventoryItem("France", "Monitor", 6)));
+        Response actual = orderAlgorithm.execute(request, requestListMap);
+        Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Mouse", 2), new WarehouseFulfill("France", "Monitor", 6)));
 
         assertThat(actual, is(expected));
     }
@@ -91,12 +97,9 @@ public class OrderAlgorithmTest {
                 asList( new OrderItem("Mouse", 6)),
                 new NoneStrategy());
 
-        Response actual = orderAlgorithm.execute(request);
-        Response expected = new Response(asList(new InventoryItem("Canada", "Mouse", 2)));
+        Response actual = orderAlgorithm.execute(request, requestListMap);
+        Response expected = new Response(asList(new WarehouseFulfill("Canada", "Mouse", 2)));
 
         assertThat(actual, is(expected));
-
-
-
     }
 }

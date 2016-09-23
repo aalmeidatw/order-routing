@@ -13,7 +13,7 @@ public class ShortestStrategy implements Strategy {
 
     @Override
     public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
-
+    //todo: rever nome de variavel,  logica do createList
         Map<String, Integer> groupByCapacity = inventoryItems
                 .stream()
                 .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,

@@ -1,4 +1,4 @@
-package model.filter.filter;
+package model.filter;
 
 import model.InventoryItem;
 import model.ShippingMethod;
