@@ -24,12 +24,12 @@ public class OrderAlgorithm {
     public Response execute(Request request){
         Map<String, Integer> requestListMap = requestMap.getRequestList(request);
         Map<String, Integer> capacityListMap = capacityMap.getCapacityList(request);
-        List<InventoryItem> inventoryItemListFiltred = getFiltredInventoryList(request);
+        List<InventoryItem> filtredInventoryList = getFiltredInventoryList(request);
         List<InventoryItem> shipping = new ArrayList<>();
 
         for (OrderItem item : request.getOrderItemsList()) {
 
-            for (InventoryItem inventory : inventoryItemListFiltred) {
+            for (InventoryItem inventory : filtredInventoryList) {
                 int valueToInsertInShippingList;
                 int neededQuantity;
 
@@ -39,7 +39,7 @@ public class OrderAlgorithm {
                      neededQuantity = requestListMap.get(item.getProductName()) - inventory.getQuantityAvailable();
 
                         if (capacityListMap.get(inventory.getWarehouseName().toUpperCase()) <= requestListMap.get(item.getProductName())) {
-                            valueToInsertInShippingList = capacityListMap.get(inventory.getWarehouseName().toUpperCase());
+                            valueToInsertInShippingList =  Math.min(valueToInsertInShippingList, capacityListMap.get(inventory.getWarehouseName().toUpperCase()));
                             neededQuantity = requestListMap.get(item.getProductName()) - valueToInsertInShippingList;
                         }
 

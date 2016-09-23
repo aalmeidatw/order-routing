@@ -79,4 +79,24 @@ public class OrderAlgorithmTest {
         int quantityNeeded = 7;
         assertThat(orderAlgorithm.getNewCapacityValue(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (0));
     }
+
+
+    @Test
+    public void shouldReturnQuantityAvailableThenWarehouseCapacityIsMoreThanQuantityNeeded() throws Exception {
+
+        Request request = new Request(asList(
+                new InventoryItem("Canada", "Mouse", 2)),
+                new Repository().getWarehouseRepository(),
+                ShippingMethod.FEDEX,
+                asList( new OrderItem("Mouse", 6)),
+                new NoneStrategy());
+
+        Response actual = orderAlgorithm.execute(request);
+        Response expected = new Response(asList(new InventoryItem("Canada", "Mouse", 2)));
+
+        assertThat(actual, is(expected));
+
+
+
+    }
 }

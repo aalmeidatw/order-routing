@@ -125,4 +125,35 @@ public class AcceptanceTests {
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
+
+    @Test
+    public void manyProductsCase() throws Exception {
+
+        Request request = new Request(asList(
+                new InventoryItem("Canada", "Mouse", 2),
+                new InventoryItem("Brazil", "Mouse", 2),
+                new InventoryItem("Brazil", "Keyboard", 3),
+                new InventoryItem("France", "Keyboard", 2),
+                new InventoryItem("South Africa", "Monitor", 4),
+                new InventoryItem("South Africa", "Camera", 1),
+                new InventoryItem("South Africa", "Mouse", 2)),
+                new Repository().getWarehouseRepository(),
+                ShippingMethod.FEDEX,
+                asList( new OrderItem("Mouse", 6),
+                        new OrderItem("Keyboard", 3),
+                        new OrderItem("Monitor", 3),
+                        new OrderItem("Camera", 1)),
+                new NoneStrategy());
+
+        Response expected = new Response(asList(
+                new InventoryItem("Canada", "Mouse", 2),
+                new InventoryItem("Brazil", "Mouse", 2),
+                new InventoryItem("South Africa", "Mouse", 2),
+                new InventoryItem("Brazil", "Keyboard", 3),
+                new InventoryItem("South Africa", "Monitor", 3),
+                new InventoryItem("South Africa", "Camera", 1)));
+
+        Response response = orderAlgorithm.execute(request);
+        assertThat(response, is(expected));
+    }
 }
