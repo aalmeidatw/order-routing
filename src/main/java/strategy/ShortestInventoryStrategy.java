@@ -13,26 +13,15 @@ public class ShortestInventoryStrategy implements Strategy {
 
     @Override
     public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
-          Map<String, Integer> groupByCapacity = inventoryItems
-                .stream()
-                .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,
-                         Collectors.summingInt(InventoryItem::getQuantityAvailable)));
 
-        Map<String, Integer> orderListMap = orderByLessUnits(groupByCapacity);
-
-        return createListOrganizerByLargeUnits(inventoryItems, orderListMap);
+        return createOrganizerListByLessUnits(inventoryItems, orderByLessUnits(inventoryItems));
     }
 
 
-    private List<InventoryItem> createListOrganizerByLargeUnits(List<InventoryItem> inventoryItems, Map<String, Integer> orderListMap) {
+    private List<InventoryItem> createOrganizerListByLessUnits(List<InventoryItem> inventoryItems, Map<String, Integer> orderListMap) {
 
         List<InventoryItem> inventoryListOrganizer = new ArrayList<>();
-
-        List<String> listOfWarehouseName = orderListMap
-                .entrySet()
-                .stream()
-                .map(warehouse -> warehouse.getKey())
-                .collect(Collectors.toList());
+        List<String> listOfWarehouseName = new ArrayList<>(orderListMap.keySet());
 
         for (String warehouse : listOfWarehouseName) {
             for (InventoryItem inventory : inventoryItems) {
@@ -44,14 +33,22 @@ public class ShortestInventoryStrategy implements Strategy {
         return inventoryListOrganizer;
     }
 
-    private Map<String, Integer> orderByLessUnits(Map<String, Integer> groupCapacity) {
-        Map<String, Integer> orderedList = new LinkedHashMap<>();
+    private Map<String, Integer> orderByLessUnits(List<InventoryItem> inventoryItems) {
+        Map<String, Integer> orderedByLessUnits = new LinkedHashMap<>();
 
-        groupCapacity.entrySet().stream()
+        Map<String, Integer> groupByLessUnits = inventoryItems
+                .stream()
+                .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,
+                        Collectors.summingInt(InventoryItem::getQuantityAvailable)));
+
+
+        groupByLessUnits.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
-                .forEachOrdered(x -> orderedList.put(x.getKey(), x.getValue()));
+                .forEachOrdered(x -> orderedByLessUnits.put(x.getKey(), x.getValue()));
 
-        return orderedList;
+        return orderedByLessUnits;
+
+
     }
 
 }

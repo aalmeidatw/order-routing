@@ -12,27 +12,15 @@ public class LargestInventoryStrategy implements Strategy {
     @Override
     public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
 
-        Map<String, Integer> groupByCapacity = inventoryItems
-                .stream()
-                .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,
-                            Collectors.summingInt(InventoryItem::getQuantityAvailable)));
-
-        Map<String, Integer> orderListMap = orderByMoreUnits(groupByCapacity);
-
-        return createListOrganizerByLargeUnits(inventoryItems, orderListMap);
+        return createListOrganizerByLargeUnits(inventoryItems, orderByLargeUnits(inventoryItems));
     }
 
     private List<InventoryItem> createListOrganizerByLargeUnits(List<InventoryItem> inventoryItems, Map<String, Integer> orderListMap){
 
         List<InventoryItem> inventoryListOrganizer = new ArrayList<>();
+        List<String> wareHouseList = new ArrayList<>(orderListMap.keySet());
 
-        List<String> listOfWarehouseName = orderListMap
-                .entrySet()
-                .stream()
-                .map(warehouse -> warehouse.getKey())
-                .collect(Collectors.toList());
-
-        for (String warehouse : listOfWarehouseName) {
+        for (String warehouse : wareHouseList) {
             for (InventoryItem inventory: inventoryItems) {
                  if (inventory.getWarehouseName().equals(warehouse)){
                     inventoryListOrganizer.add(inventory);
@@ -42,13 +30,19 @@ public class LargestInventoryStrategy implements Strategy {
         return inventoryListOrganizer;
     }
 
-    private Map<String, Integer> orderByMoreUnits(Map<String, Integer> groupCapacity) {
-        Map<String, Integer> orderedList = new LinkedHashMap<>();
+    private Map<String, Integer> orderByLargeUnits(List<InventoryItem> inventoryItems) {
 
-        groupCapacity.entrySet().stream()
+        Map<String, Integer> orderedByLargeUnits = new LinkedHashMap<>();
+
+        Map<String, Integer> groupByLargeUnits = inventoryItems
+                .stream()
+                .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,
+                        Collectors.summingInt(InventoryItem::getQuantityAvailable)));
+
+        groupByLargeUnits.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .forEachOrdered(x -> orderedList.put(x.getKey(), x.getValue()));
+                .forEachOrdered(x -> orderedByLargeUnits.put(x.getKey(), x.getValue()));
 
-        return orderedList;
+        return orderedByLargeUnits;
     }
 }
