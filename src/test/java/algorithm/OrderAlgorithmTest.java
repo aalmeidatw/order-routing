@@ -13,7 +13,7 @@ import model.map.RequestListMap;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
-import strategy.NoneStrategy;
+import strategy.NoneInventoryStrategy;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -44,7 +44,7 @@ public class OrderAlgorithmTest {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.DHL,
                 asList( new OrderItem("Keyboard",2)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
 
@@ -63,7 +63,7 @@ public class OrderAlgorithmTest {
                 ShippingMethod.DHL,
                 asList( new OrderItem("Mouse", 2),
                         new OrderItem("Monitor", 6)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         Response actual = orderAlgorithm.execute(request);
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Mouse", 2), new WarehouseFulfill("France", "Monitor", 6)));
@@ -93,7 +93,7 @@ public class OrderAlgorithmTest {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.FEDEX,
                 asList( new OrderItem("Mouse", 6)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         Response actual = orderAlgorithm.execute(request);
         Response expected = new Response(asList(new WarehouseFulfill("Canada", "Mouse", 2)));
@@ -110,7 +110,7 @@ public class OrderAlgorithmTest {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.FEDEX,
                 asList( new OrderItem("Mouse", 5)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         orderAlgorithm.execute(request);
     }

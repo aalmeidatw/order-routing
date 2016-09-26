@@ -4,10 +4,9 @@ import model.InventoryItem;
 import model.ShippingMethod;
 import model.Warehouse;
 import model.dto.Request;
-import model.filter.FilterShippingMethod;
 import org.junit.Before;
 import org.junit.Test;
-import strategy.NoneStrategy;
+import strategy.NoneInventoryStrategy;
 import java.util.List;
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -36,7 +35,7 @@ public class FilterShippingMethodTest {
                 asList(brazilWarehouse, chileWarehouse),
                 ShippingMethod.UPS,
                 asList( null, null),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         List<InventoryItem> response = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
         List<InventoryItem> actual = asList(inventoryItem);

@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ShortestStrategy implements Strategy {
+public class ShortestInventoryStrategy implements Strategy {
 
     @Override
     public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
-    //todo: rever nome de variavel,  logica do createList
-        Map<String, Integer> groupByCapacity = inventoryItems
+          Map<String, Integer> groupByCapacity = inventoryItems
                 .stream()
                 .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,
                          Collectors.summingInt(InventoryItem::getQuantityAvailable)));

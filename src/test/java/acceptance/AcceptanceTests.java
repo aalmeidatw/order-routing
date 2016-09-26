@@ -2,7 +2,6 @@ package acceptance;
 
 import algorithm.OrderAlgorithm;
 import exception.ProductIsNotAvailableException;
-import lombok.Value;
 import model.InventoryItem;
 import model.OrderItem;
 import model.ShippingMethod;
@@ -15,9 +14,9 @@ import model.map.RequestListMap;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
-import strategy.LargestStrategy;
-import strategy.NoneStrategy;
-import strategy.ShortestStrategy;
+import strategy.LargestInventoryStrategy;
+import strategy.NoneInventoryStrategy;
+import strategy.ShortestInventoryStrategy;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.core.Is.is;
@@ -46,7 +45,7 @@ public class AcceptanceTests {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.DHL,
                 asList( new OrderItem("Keyboard",2)),
-                        new NoneStrategy());
+                        new NoneInventoryStrategy());
 
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
 
@@ -63,7 +62,7 @@ public class AcceptanceTests {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.UPS,
                 asList( new OrderItem("Mouse",1)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         Response expected = new Response(asList(new WarehouseFulfill("South Africa", "Mouse" , 1)));
 
@@ -81,7 +80,7 @@ public class AcceptanceTests {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.FEDEX,
                 asList( new OrderItem("Mouse",4), new OrderItem("Keyboard", 3)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         Response expected = new Response(asList(new WarehouseFulfill("Canada", "Mouse", 4),
                     new WarehouseFulfill("Canada", "Keyboard", 1),
@@ -103,7 +102,7 @@ public class AcceptanceTests {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.DHL,
                 asList( new OrderItem("Mouse",1), new OrderItem("Keyboard", 1)),
-                new LargestStrategy());
+                new LargestInventoryStrategy());
 
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Mouse", 1),
                 new WarehouseFulfill("Brazil", "Keyboard", 1)));
@@ -123,7 +122,7 @@ public class AcceptanceTests {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.DHL,
                 asList( new OrderItem("Mouse",1), new OrderItem("Keyboard", 1)),
-                new ShortestStrategy());
+                new ShortestInventoryStrategy());
 
         Response expected = new Response(asList(new WarehouseFulfill("China", "Mouse", 1),
                 new WarehouseFulfill("France", "Keyboard", 1)));
@@ -149,7 +148,7 @@ public class AcceptanceTests {
                         new OrderItem("Keyboard", 3),
                         new OrderItem("Monitor", 3),
                         new OrderItem("Camera", 1)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         Response expected = new Response(asList(
                 new WarehouseFulfill("Canada", "Mouse", 2),
@@ -172,7 +171,7 @@ public class AcceptanceTests {
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.FEDEX,
                 asList( new OrderItem("Mouse", 5)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         orderAlgorithm.execute(request);
 

@@ -7,7 +7,7 @@ import model.dto.Request;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
-import strategy.NoneStrategy;
+import strategy.NoneInventoryStrategy;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
@@ -39,7 +39,7 @@ public class RequestListMapTest {
                 ShippingMethod.FEDEX,
                 asList( new OrderItem("Mouse", 6),
                         new OrderItem("Camera", 1)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
         this.requestListMap.createRequestMap(request);
     }
 

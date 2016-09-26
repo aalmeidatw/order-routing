@@ -7,7 +7,7 @@ import model.dto.Request;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
-import strategy.NoneStrategy;
+import strategy.NoneInventoryStrategy;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -39,7 +39,7 @@ public class CapacityListMapTest {
                         new OrderItem("Keyboard", 3),
                         new OrderItem("Monitor", 3),
                         new OrderItem("Camera", 1)),
-                new NoneStrategy());
+                new NoneInventoryStrategy());
 
         capacityListMap.createCapacityMap(request);
     }

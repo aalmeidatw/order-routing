@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Value
-public class LargestStrategy implements Strategy {
+public class LargestInventoryStrategy implements Strategy {
 
     @Override
     public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
