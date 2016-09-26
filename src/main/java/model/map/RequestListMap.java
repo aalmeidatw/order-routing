@@ -7,14 +7,15 @@ import model.dto.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RequestListMap {
     private Map<String, Integer> requestListMap = new HashMap<>();
+    private boolean isCompleted;
 
 
     public void createRequestMap(Request request){
-
         this.requestListMap = request.getOrderItemsList()
                             .stream()
                             .collect(Collectors.toMap(
@@ -33,11 +34,10 @@ public class RequestListMap {
         requestListMap.put(productName, neededQuantity);
     }
 
+    public boolean isMapCompleted(){
+        requestListMap.forEach((item , quantityNeeded)-> isCompleted = (quantityNeeded <= 0)? true : false);
 
-    /*public Map<String, Integer> getRequestList(Request request){
-
-        return request.getOrderItemsList()
-                .stream()
-                .collect(Collectors.toMap(OrderItem::getProductName, OrderItem::getQuantityNeeded));
-    }*/
+        return isCompleted;
+    }
 }
+

@@ -1,6 +1,7 @@
 package acceptance;
 
 import algorithm.OrderAlgorithm;
+import exception.ProductIsNotAvailableException;
 import lombok.Value;
 import model.InventoryItem;
 import model.OrderItem;
@@ -49,7 +50,7 @@ public class AcceptanceTests {
 
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
 
-        Response response = orderAlgorithm.execute(request, requestListMap);
+        Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
       }
 
@@ -66,7 +67,7 @@ public class AcceptanceTests {
 
         Response expected = new Response(asList(new WarehouseFulfill("South Africa", "Mouse" , 1)));
 
-        Response response = orderAlgorithm.execute(request, requestListMap);
+        Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
 
@@ -86,7 +87,7 @@ public class AcceptanceTests {
                     new WarehouseFulfill("Canada", "Keyboard", 1),
                     new WarehouseFulfill("France", "Keyboard", 2)));
 
-        Response response = orderAlgorithm.execute(request, requestListMap);
+        Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
 
@@ -107,7 +108,7 @@ public class AcceptanceTests {
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Mouse", 1),
                 new WarehouseFulfill("Brazil", "Keyboard", 1)));
 
-        Response response = orderAlgorithm.execute(request, requestListMap);
+        Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
 
@@ -127,7 +128,7 @@ public class AcceptanceTests {
         Response expected = new Response(asList(new WarehouseFulfill("China", "Mouse", 1),
                 new WarehouseFulfill("France", "Keyboard", 1)));
 
-        Response response = orderAlgorithm.execute(request, requestListMap);
+        Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
 
@@ -158,11 +159,11 @@ public class AcceptanceTests {
                 new WarehouseFulfill("South Africa", "Monitor", 3),
                 new WarehouseFulfill("South Africa", "Camera", 1)));
 
-        Response response = orderAlgorithm.execute(request, requestListMap);
+        Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
 
-    /*@Test
+    @Test(expected = ProductIsNotAvailableException.class)
     public void invalidRequest() throws Exception {
 
         Request request = new Request(asList(
@@ -170,12 +171,12 @@ public class AcceptanceTests {
                 new InventoryItem("Brazil", "Mouse", 3)),
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.FEDEX,
-                asList( new OrderItem("Mouse",5)),
+                asList( new OrderItem("Mouse", 5)),
                 new NoneStrategy());
 
-        Response expected = new Response(asList(new InventoryItem("Brazil", "Keyboard" , 2)));
+        orderAlgorithm.execute(request);
 
-        Response response = orderAlgorithm.execute(request);
-        assertThat(response, is(expected));
-    }*/
+
+
+    }
 }

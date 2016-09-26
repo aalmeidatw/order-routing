@@ -1,5 +1,6 @@
 package algorithm;
 
+import exception.ProductIsNotAvailableException;
 import model.InventoryItem;
 import model.OrderItem;
 import model.ShippingMethod;
@@ -13,9 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
 import strategy.NoneStrategy;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
@@ -24,17 +22,18 @@ import static org.junit.Assert.*;
 public class OrderAlgorithmTest {
     private OrderAlgorithm orderAlgorithm;
     private RequestListMap requestListMap;
-    private Map<String, Integer> capacityMap = new HashMap<>();
+    private CapacityListMap capacityMap;
 
     @Before
     public void setUp() throws Exception {
         this.requestListMap = new RequestListMap();
+        this.capacityMap = new CapacityListMap();
 
         this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
                 new RequestListMap(),
                 new CapacityListMap());
 
-        this.capacityMap.put("CANADA", 5);
+        this.capacityMap.updateCapacityQuantity("CANADA", 5);
     }
 
     @Test
@@ -49,7 +48,7 @@ public class OrderAlgorithmTest {
 
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
 
-        Response response = orderAlgorithm.execute(request, requestListMap);
+        Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
     }
 
@@ -66,7 +65,7 @@ public class OrderAlgorithmTest {
                         new OrderItem("Monitor", 6)),
                 new NoneStrategy());
 
-        Response actual = orderAlgorithm.execute(request, requestListMap);
+        Response actual = orderAlgorithm.execute(request);
         Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Mouse", 2), new WarehouseFulfill("France", "Monitor", 6)));
 
         assertThat(actual, is(expected));
@@ -86,8 +85,7 @@ public class OrderAlgorithmTest {
         assertThat(orderAlgorithm.getNewCapacityValue(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (0));
     }
 
-
-    @Test
+    @Test(expected = ProductIsNotAvailableException.class)
     public void shouldReturnQuantityAvailableThenWarehouseCapacityIsMoreThanQuantityNeeded() throws Exception {
 
         Request request = new Request(asList(
@@ -97,9 +95,23 @@ public class OrderAlgorithmTest {
                 asList( new OrderItem("Mouse", 6)),
                 new NoneStrategy());
 
-        Response actual = orderAlgorithm.execute(request, requestListMap);
+        Response actual = orderAlgorithm.execute(request);
         Response expected = new Response(asList(new WarehouseFulfill("Canada", "Mouse", 2)));
 
         assertThat(actual, is(expected));
+    }
+
+    @Test(expected = ProductIsNotAvailableException.class)
+    public void shouldThrowProductIsNotAvailableExceptionWhenOrderIsNotCompleted() throws Exception {
+
+        Request request = new Request(asList(
+                new InventoryItem("China", "Mouse", 4),
+                new InventoryItem("Brazil", "Mouse", 3)),
+                new Repository().getWarehouseRepository(),
+                ShippingMethod.FEDEX,
+                asList( new OrderItem("Mouse", 5)),
+                new NoneStrategy());
+
+        orderAlgorithm.execute(request);
     }
 }
