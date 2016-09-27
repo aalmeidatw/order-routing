@@ -1,8 +1,8 @@
 package strategy;
 
 import model.InventoryItem;
+import model.Warehouse;
 import strategy.model.Strategy;
-
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,11 +12,10 @@ import java.util.stream.Collectors;
 public class ShortestInventoryStrategy implements Strategy {
 
     @Override
-    public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
+    public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems, List<Warehouse> warehouseList) {
 
         return createOrganizerListByLessUnits(inventoryItems, orderByLessUnits(inventoryItems));
     }
-
 
     private List<InventoryItem> createOrganizerListByLessUnits(List<InventoryItem> inventoryItems, Map<String, Integer> orderListMap) {
 
@@ -40,7 +39,6 @@ public class ShortestInventoryStrategy implements Strategy {
                 .stream()
                 .collect(Collectors.groupingBy(InventoryItem::getWarehouseName,
                         Collectors.summingInt(InventoryItem::getQuantityAvailable)));
-
 
         groupByLessUnits.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())

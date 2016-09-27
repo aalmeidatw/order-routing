@@ -3,13 +3,13 @@ package model.map;
 
 import model.Warehouse;
 import model.dto.Request;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CapacityListMap {
-    Map<String, Integer> capacityListMap = new HashMap<>();
+    private Map<String, Integer> capacityListMap = new HashMap<>();
+    private final int NONE_QUANTITY = 0;
 
     public void createCapacityMap(Request request){
         this.capacityListMap = request.getWarehouseList()
@@ -19,7 +19,7 @@ public class CapacityListMap {
     }
 
     public boolean isMoreThanZero(String warehouseName) {
-        return capacityListMap.get(warehouseName.toUpperCase()) > 0;
+        return capacityListMap.get(warehouseName.toUpperCase()) > NONE_QUANTITY;
     }
 
     public int getProductQuantity(String warehouseName) {

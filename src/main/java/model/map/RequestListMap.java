@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class RequestListMap {
     private Map<String, Integer> requestListMap = new HashMap<>();
+    private final int NONE_QUANTITY = 0;
     private boolean isCompleted;
-
 
     public void createRequestMap(Request request){
         this.requestListMap = request.getOrderItemsList()
@@ -23,7 +23,7 @@ public class RequestListMap {
     }
 
     public boolean isMoreThanZero(String productName) {
-        return requestListMap.get(productName) > 0;
+        return requestListMap.get(productName) > NONE_QUANTITY;
     }
 
     public int getProductQuantity(String productName) {
@@ -35,9 +35,8 @@ public class RequestListMap {
     }
 
     public boolean isMapCompleted(){
-        requestListMap.forEach((item , quantityNeeded)-> isCompleted = (quantityNeeded <= 0)? true : false);
-
-        return isCompleted;
+        requestListMap.forEach((item , quantityNeeded)-> isCompleted = (quantityNeeded <= NONE_QUANTITY)? true : false);
+         return isCompleted;
     }
 }
 

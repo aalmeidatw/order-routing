@@ -12,7 +12,6 @@ import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
-
 public class RequestListMapTest {
     private RequestListMap requestListMap;
     private Request request;
@@ -20,24 +19,27 @@ public class RequestListMapTest {
     private static String CAMERA_PRODUCT = "Camera";
     private static int MOUSE_QUANTITY = 6;
     private static int MOUSE_NEW_QUANTITY = 10;
-
+    private static int NONE_QUANTITY = 0;
+    private static int QUANTITY_ONE = 1;
 
     @Before
     public void setUp() throws Exception {
 
         this.requestListMap = new RequestListMap();
 
-        this.request = new Request(asList(
-                new InventoryItem("Canada", "Mouse", 2),
-                new InventoryItem("Brazil", "Mouse", 2),
-                new InventoryItem("Brazil", "Keyboard", 3),
-                new InventoryItem("France", "Keyboard", 2),
-                new InventoryItem("South Africa", "Monitor", 4),
-                new InventoryItem("South Africa", "Camera", 1),
-                new InventoryItem("South Africa", "Mouse", 2)),
+        this.request = new Request(
+                asList(
+                        new InventoryItem("Canada", "Mouse", 2),
+                        new InventoryItem("Brazil", "Mouse", 2),
+                        new InventoryItem("Brazil", "Keyboard", 3),
+                        new InventoryItem("France", "Keyboard", 2),
+                        new InventoryItem("South Africa", "Monitor", 4),
+                        new InventoryItem("South Africa", "Camera", 1),
+                        new InventoryItem("South Africa", "Mouse", 2)),
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.FEDEX,
-                asList( new OrderItem("Mouse", 6),
+                asList(
+                        new OrderItem("Mouse", 6),
                         new OrderItem("Camera", 1)),
                 new NoneInventoryStrategy());
         this.requestListMap.createRequestMap(request);
@@ -61,14 +63,14 @@ public class RequestListMapTest {
 
     @Test
     public void shouldReturnTrueWhenMapListIsCompleted() throws Exception {
-        requestListMap.updateProductQuantity(MOUSE_PRODUCT, 0);
-        requestListMap.updateProductQuantity(CAMERA_PRODUCT, 0);
+        requestListMap.updateProductQuantity(MOUSE_PRODUCT, NONE_QUANTITY);
+        requestListMap.updateProductQuantity(CAMERA_PRODUCT, NONE_QUANTITY);
         assertTrue(requestListMap.isMapCompleted());
     }
     @Test
     public void shouldReturnFalseWhenMapListIsNotCompleted() throws Exception {
-        requestListMap.updateProductQuantity(MOUSE_PRODUCT, 0);
-        requestListMap.updateProductQuantity(CAMERA_PRODUCT, 1);
+        requestListMap.updateProductQuantity(MOUSE_PRODUCT, NONE_QUANTITY);
+        requestListMap.updateProductQuantity(CAMERA_PRODUCT, QUANTITY_ONE);
         assertFalse(requestListMap.isMapCompleted());
     }
 }

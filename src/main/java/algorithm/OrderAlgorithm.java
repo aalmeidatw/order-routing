@@ -61,12 +61,11 @@ public class OrderAlgorithm {
         return new Response(warehouseFulfillList);
     }
 
-
     private List<InventoryItem> getFiltredInventoryList(Request request){
         Strategy strategy = request.getStrategy();
         List<InventoryItem> inventoryListFiltredByShippingMethod = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
 
-        return strategy.executeStrategy(inventoryListFiltredByShippingMethod);
+        return strategy.executeStrategy(inventoryListFiltredByShippingMethod, request.getWarehouseList());
     }
 
     protected void updateRequestAndCapacityMap(RequestListMap requestMap, CapacityListMap capacityMap,

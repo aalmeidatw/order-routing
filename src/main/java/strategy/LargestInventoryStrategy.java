@@ -2,6 +2,7 @@ package strategy;
 
 import lombok.Value;
 import model.InventoryItem;
+import model.Warehouse;
 import strategy.model.Strategy;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 public class LargestInventoryStrategy implements Strategy {
 
     @Override
-    public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems) {
+    public List<InventoryItem> executeStrategy(List<InventoryItem> inventoryItems, List<Warehouse> warehouseList) {
 
         return createListOrganizerByLargeUnits(inventoryItems, orderByLargeUnits(inventoryItems));
     }

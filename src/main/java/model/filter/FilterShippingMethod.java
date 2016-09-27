@@ -6,7 +6,6 @@ import model.InventoryItem;
 import model.ShippingMethod;
 import model.Warehouse;
 import model.dto.Request;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
