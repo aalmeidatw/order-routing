@@ -16,6 +16,7 @@ repositories {
     // Use 'jcenter' for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+    mavenCentral()
 }
 
 task(integration_test) << {
@@ -26,6 +27,6 @@ task(integration_test) << {
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.14'
     compile "org.projectlombok:lombok:1.16.10"
-    compile 'org.mockito:mockito-all:1.9.45'
+    testCompile "org.mockito:mockito-core:1.+"
     testCompile 'junit:junit:4.12'
 }
