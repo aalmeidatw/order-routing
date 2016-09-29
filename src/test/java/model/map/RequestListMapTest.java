@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 
 public class RequestListMapTest {
     private RequestListMap requestListMap;
-    private Request request;
     private static String MOUSE_PRODUCT = "Mouse";
     private static String CAMERA_PRODUCT = "Camera";
     private static int MOUSE_QUANTITY = 6;
@@ -24,24 +23,21 @@ public class RequestListMapTest {
 
     @Before
     public void setUp() throws Exception {
-
-        this.requestListMap = new RequestListMap();
-
-        this.request = new Request(
-                asList(
-                        new InventoryItem("Canada", "Mouse", 2),
+        Request request = Request.builder()
+                .inventoryItems(asList(new InventoryItem("Canada", "Mouse", 2),
                         new InventoryItem("Brazil", "Mouse", 2),
                         new InventoryItem("Brazil", "Keyboard", 3),
                         new InventoryItem("France", "Keyboard", 2),
                         new InventoryItem("South Africa", "Monitor", 4),
                         new InventoryItem("South Africa", "Camera", 1),
-                        new InventoryItem("South Africa", "Mouse", 2)),
-                new Repository().getWarehouseRepository(),
-                ShippingMethod.FEDEX,
-                asList(
-                        new OrderItem("Mouse", 6),
-                        new OrderItem("Camera", 1)),
-                new NoneInventoryStrategy());
+                        new InventoryItem("South Africa", "Mouse", 2)))
+                .warehouseList(new Repository().getWarehouseRepository())
+                .shippingMethodMethod(ShippingMethod.FEDEX)
+                .orderItemsList(asList(new OrderItem("Mouse",6),
+                        new OrderItem("Camera", 1)))
+                .strategy(new NoneInventoryStrategy()).build();
+
+        this.requestListMap = new RequestListMap();
         this.requestListMap.createRequestMap(request.getOrderItemsList());
     }
 
