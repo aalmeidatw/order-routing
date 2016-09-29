@@ -62,7 +62,6 @@ public class OrderAlgorithmTest {
                 .strategy(strategyMock).build();
 
         orderAlgorithm.execute(request);
-
         verify(strategyMock).executeStrategy(anyListOf(InventoryItem.class), anyListOf(Warehouse.class));
     }
 
@@ -74,7 +73,6 @@ public class OrderAlgorithmTest {
                                                     new OrderItem("Mouse", 0),
                                                     MOUSE_NEEDED, NEW_CAPACITY);
 
-
         verify(requestMapMock, times(1)).updateProductQuantity("Mouse", 2);
     }
 
@@ -85,7 +83,6 @@ public class OrderAlgorithmTest {
                                                     new InventoryItem("Brazil", "Mouse", 2),
                                                     new OrderItem("Mouse", 0),
                                                     MOUSE_NEEDED, NEW_CAPACITY);
-
 
         verify(capacityListMapMock, times(1)).updateCapacityQuantity("Brazil", 0);
     }
