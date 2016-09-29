@@ -24,7 +24,7 @@ public class OrderAlgorithm {
 
     public Response execute(Request request) throws Exception{
 
-        requestMap.createRequestMap(request);
+        requestMap.createRequestMap(request.getOrderItemsList());
         capacityMap.createCapacityMap(request);
 
         List<InventoryItem> filtredInventoryList = getFiltredInventoryList(request);

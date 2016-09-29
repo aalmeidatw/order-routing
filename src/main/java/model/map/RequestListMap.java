@@ -1,9 +1,8 @@
 package model.map;
 
 import model.OrderItem;
-import model.dto.Request;
-
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -12,8 +11,8 @@ public class RequestListMap {
     private final int NONE_QUANTITY = 0;
     private boolean isCompleted;
 
-    public void createRequestMap(Request request){
-        this.requestListMap = request.getOrderItemsList()
+    public void createRequestMap(List<OrderItem> orderItemList){
+        this.requestListMap = orderItemList
                             .stream()
                             .collect(Collectors.toMap(
                                         OrderItem::getProductName, OrderItem::getQuantityNeeded));

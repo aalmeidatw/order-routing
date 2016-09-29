@@ -42,7 +42,7 @@ public class RequestListMapTest {
                         new OrderItem("Mouse", 6),
                         new OrderItem("Camera", 1)),
                 new NoneInventoryStrategy());
-        this.requestListMap.createRequestMap(request);
+        this.requestListMap.createRequestMap(request.getOrderItemsList());
     }
 
     @Test
