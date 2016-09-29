@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 public class CapacityListMap {
     private Map<String, Integer> capacityListMap = new HashMap<>();
     private final int NONE_QUANTITY = 0;
+// construtor
 
     public void createCapacityMap(Request request){
         this.capacityListMap = request.getWarehouseList()

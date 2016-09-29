@@ -14,12 +14,12 @@ import model.map.RequestListMap;
 import org.junit.Before;
 import org.junit.Test;
 import repository.Repository;
+import strategy.LargestCapacityStrategy;
 import strategy.LargestInventoryStrategy;
 import strategy.NoneInventoryStrategy;
 import strategy.ShortestInventoryStrategy;
-import strategy.LargestCapacityStrategy;
-
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -42,10 +42,10 @@ public class AcceptanceTests {
                     new InventoryItem("France", "Mouse", 2)),
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.DHL,
-                asList( new OrderItem("Keyboard",2)),
+                singletonList( new OrderItem("Keyboard",2)),
                         new NoneInventoryStrategy());
 
-        Response expected = new Response(asList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
+        Response expected = new Response(singletonList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -59,10 +59,10 @@ public class AcceptanceTests {
                     new InventoryItem("South Africa", "Mouse", 2)),
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.UPS,
-                asList( new OrderItem("Mouse",1)),
+                singletonList( new OrderItem("Mouse",1)),
                         new NoneInventoryStrategy());
 
-        Response expected = new Response(asList(new WarehouseFulfill("South Africa", "Mouse" , 1)));
+        Response expected = new Response(singletonList(new WarehouseFulfill("South Africa", "Mouse" , 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -202,7 +202,7 @@ public class AcceptanceTests {
                     new InventoryItem("Brazil", "Mouse", 3)),
                 new Repository().getWarehouseRepository(),
                 ShippingMethod.FEDEX,
-                asList(
+                singletonList(
                         new OrderItem("Mouse", 5)),
                 new NoneInventoryStrategy());
 

@@ -2,12 +2,9 @@ package model.map;
 
 import model.OrderItem;
 import model.dto.Request;
-import model.dto.Response;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RequestListMap {
@@ -35,7 +32,7 @@ public class RequestListMap {
     }
 
     public boolean isMapCompleted(){
-        requestListMap.forEach((item , quantityNeeded)-> isCompleted = (quantityNeeded <= NONE_QUANTITY)? true : false);
+        requestListMap.forEach((item , quantityNeeded)-> isCompleted = (quantityNeeded <= NONE_QUANTITY));
          return isCompleted;
     }
 }

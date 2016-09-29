@@ -1,5 +1,6 @@
 package model.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Value;
 import model.InventoryItem;
@@ -8,10 +9,10 @@ import model.ShippingMethod;
 import model.Warehouse;
 import strategy.model.Strategy;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Builder
 @Value
 public class Request {
     private List<InventoryItem> inventoryItems;

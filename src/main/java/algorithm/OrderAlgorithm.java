@@ -28,7 +28,7 @@ public class OrderAlgorithm {
         capacityMap.createCapacityMap(request);
 
         List<InventoryItem> filtredInventoryList = getFiltredInventoryList(request);
-        List<WarehouseFulfill> warehouseFulfillList = new ArrayList<>();
+        List<WarehouseFulfill> warehousesFulfillOrderlList = new ArrayList<>();
 
         for (OrderItem item : request.getOrderItemsList()) {
 
@@ -49,7 +49,7 @@ public class OrderAlgorithm {
                     int newCapacity = getNewCapacityValue(inventory, capacityMap, valueToInsertInShippingList);
 
                     updateRequestAndCapacityMap(requestMap, capacityMap, inventory, item, Math.max(0, neededQuantity), newCapacity);
-                    warehouseFulfillList.add(new WarehouseFulfill( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
+                    warehousesFulfillOrderlList.add(new WarehouseFulfill( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
                 }
             }
         }
@@ -58,7 +58,7 @@ public class OrderAlgorithm {
             throw new ProductIsNotAvailableException(ORDER_NOT_COMPLETED);
         }
 
-        return new Response(warehouseFulfillList);
+        return new Response(warehousesFulfillOrderlList);
     }
 
     private List<InventoryItem> getFiltredInventoryList(Request request){
@@ -69,8 +69,8 @@ public class OrderAlgorithm {
     }
 
     protected void updateRequestAndCapacityMap(RequestListMap requestMap, CapacityListMap capacityMap,
-                                             InventoryItem inventoryItem, OrderItem item,
-                                             int neededQuantity, int newCapacity) {
+                                               InventoryItem inventoryItem, OrderItem item,
+                                               int neededQuantity, int newCapacity) {
 
         requestMap.updateProductQuantity(item.getProductName(), neededQuantity);
         capacityMap.updateCapacityQuantity(inventoryItem.getWarehouseName(), newCapacity );
