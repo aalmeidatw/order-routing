@@ -19,7 +19,4 @@ public class Warehouse {
         this.shippingMethodList = shippingMethodList;
         this.capacity = capacity;
     }
-
-
-
 }

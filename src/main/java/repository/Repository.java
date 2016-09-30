@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.Value;
 import model.ShippingMethod;
 import model.Warehouse;
+
 import java.util.List;
+
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 @Value
 @Getter
@@ -14,8 +17,8 @@ public class Repository {
     private static List<ShippingMethod> BRAZIL_SHIPPING_METHOD = asList(ShippingMethod.DHL, ShippingMethod.FEDEX);
     private static List<ShippingMethod> FRANCE_SHIPPING_METHOD = asList(ShippingMethod.DHL, ShippingMethod.FEDEX, ShippingMethod.UPS);
     private static List<ShippingMethod> SOUTH_AFRICA_SHIPPING_METHOD = asList(ShippingMethod.FEDEX, ShippingMethod.UPS);
-    private static List<ShippingMethod> CHINA_SHIPPING_METHOD = asList(ShippingMethod.DHL);
-    private static List<ShippingMethod> CANADA_SHIPPING_METHOD = asList(ShippingMethod.FEDEX);
+    private static List<ShippingMethod> CHINA_SHIPPING_METHOD = singletonList(ShippingMethod.DHL);
+    private static List<ShippingMethod> CANADA_SHIPPING_METHOD = singletonList(ShippingMethod.FEDEX);
 
     private static Warehouse BRAZIL_WAREHOUSE = Warehouse.builder()
             .warehouseName("BRAZIL")
