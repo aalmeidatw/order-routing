@@ -2,18 +2,17 @@ package model.map;
 
 
 import model.Warehouse;
-import model.dto.Request;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CapacityListMap {
     private Map<String, Integer> capacityListMap = new HashMap<>();
     private final int NONE_QUANTITY = 0;
-// construtor
 
-    public void createCapacityMap(Request request){
-        this.capacityListMap = request.getWarehouseList()
+    public void createCapacityMap(List<Warehouse> warehouseList){
+        this.capacityListMap = warehouseList
                     .stream()
                     .collect(Collectors.toMap(
                             Warehouse::getWarehouseName, Warehouse::getCapacity));

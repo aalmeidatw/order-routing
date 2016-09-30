@@ -12,15 +12,15 @@ public class FilterShippingMethod {
     public List<InventoryItem> getInventoryListFiltredByShippingMethodRequest(Request request){
 
         return request.getInventoryItems().stream()
-                                .filter(inventoryItem -> isShippingMethodIsSuported(inventoryItem,
+                                .filter(inventoryItem -> isShippingMethodSuported(inventoryItem,
                                         request.getShippingMethodMethod(),
                                         request.getWarehouseList()))
                                 .collect(Collectors.toList());
      }
 
-    private boolean isShippingMethodIsSuported(InventoryItem inventoryItem,
-                                               ShippingMethod shippingMethod,
-                                               List<Warehouse> warehouseList) {
+    private boolean isShippingMethodSuported(InventoryItem inventoryItem,
+                                             ShippingMethod shippingMethod,
+                                             List<Warehouse> warehouseList) {
         return warehouseList.stream()
                             .anyMatch(warehouse ->  (warehouse.getWarehouseName().equals(inventoryItem.getWarehouseName().toUpperCase()) &&
                                                     (warehouse.getShippingMethodList().contains(shippingMethod))));

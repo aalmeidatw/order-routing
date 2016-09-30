@@ -17,12 +17,30 @@ public class Repository {
     private static List<ShippingMethod> CHINA_SHIPPING_METHOD = asList(ShippingMethod.DHL);
     private static List<ShippingMethod> CANADA_SHIPPING_METHOD = asList(ShippingMethod.FEDEX);
 
-    private static Warehouse BRAZIL_WAREHOUSE = new Warehouse("BRAZIL", BRAZIL_SHIPPING_METHOD, 15);
-    private static Warehouse FRANCE_WAREHOUSE = new Warehouse("FRANCE", FRANCE_SHIPPING_METHOD, 10);
-    private static Warehouse SOUTH_AFRICA_WAREHOUSE = new Warehouse("SOUTH AFRICA", SOUTH_AFRICA_SHIPPING_METHOD, 10);
-    private static Warehouse CHINA_WAREHOUSE = new Warehouse("CHINA", CHINA_SHIPPING_METHOD, 20);
-    private static Warehouse CANADA_WAREHOUSE = new Warehouse("CANADA", CANADA_SHIPPING_METHOD, 5);
+    private static Warehouse BRAZIL_WAREHOUSE = Warehouse.builder()
+            .warehouseName("BRAZIL")
+            .shippingMethodList(BRAZIL_SHIPPING_METHOD)
+            .capacity(15).build();
 
+    private static Warehouse FRANCE_WAREHOUSE = Warehouse.builder()
+            .warehouseName("FRANCE")
+            .shippingMethodList(FRANCE_SHIPPING_METHOD)
+            .capacity(10).build();
+
+    private static Warehouse SOUTH_AFRICA_WAREHOUSE = Warehouse.builder()
+            .warehouseName("SOUTH AFRICA")
+            .shippingMethodList(SOUTH_AFRICA_SHIPPING_METHOD)
+            .capacity(10).build();
+
+    private static Warehouse CHINA_WAREHOUSE = Warehouse.builder()
+            .warehouseName("CHINA")
+            .shippingMethodList(CHINA_SHIPPING_METHOD)
+            .capacity(20).build();
+
+    private static Warehouse CANADA_WAREHOUSE = Warehouse.builder()
+            .warehouseName("CANADA")
+            .shippingMethodList(CANADA_SHIPPING_METHOD)
+            .capacity(5).build();
 
     public  List<Warehouse> getWarehouseRepository(){
         return asList(BRAZIL_WAREHOUSE, FRANCE_WAREHOUSE, SOUTH_AFRICA_WAREHOUSE, CHINA_WAREHOUSE, CANADA_WAREHOUSE);
