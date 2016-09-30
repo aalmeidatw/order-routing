@@ -10,11 +10,11 @@ import repository.Repository;
 import strategy.NoneInventoryStrategy;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class CapacityListMapTest {
     private CapacityListMap capacityListMap;
-    private Request request;
     private static final int BRAZIL_NEW_CAPACITY = 10;
     private static final int BRAZIL_CAPACITY = 15 ;
     private static String BRAZIL_WAREHOUSE_NAME = "BRAZIL";
@@ -23,23 +23,23 @@ public class CapacityListMapTest {
     public void setUp() throws Exception {
         this.capacityListMap = new CapacityListMap();
 
-        this.request = new Request(
-                asList(
+        Request request = Request.builder()
+                .inventoryItems(asList(
                         new InventoryItem("Canada", "Mouse", 2),
                         new InventoryItem("Brazil", "Mouse", 2),
                         new InventoryItem("Brazil", "Keyboard", 3),
                         new InventoryItem("France", "Keyboard", 2),
                         new InventoryItem("South Africa", "Monitor", 4),
                         new InventoryItem("South Africa", "Camera", 1),
-                        new InventoryItem("South Africa", "Mouse", 2)),
-                new Repository().getWarehouseRepository(),
-                ShippingMethod.FEDEX,
-                asList(
+                        new InventoryItem("South Africa", "Mouse", 2)))
+                .warehouseList(new Repository().getWarehouseRepository())
+                .shippingMethodMethod(ShippingMethod.FEDEX)
+                .orderItemsList(asList(
                         new OrderItem("Mouse", 6),
                         new OrderItem("Keyboard", 3),
                         new OrderItem("Monitor", 3),
-                        new OrderItem("Camera", 1)),
-                new NoneInventoryStrategy());
+                        new OrderItem("Camera", 1)))
+                .strategy(new NoneInventoryStrategy()).build();
 
         capacityListMap.createCapacityMap(request);
     }

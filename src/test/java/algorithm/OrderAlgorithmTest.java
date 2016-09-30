@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import repository.Repository;
 import strategy.NoneInventoryStrategy;
 import strategy.model.Strategy;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
