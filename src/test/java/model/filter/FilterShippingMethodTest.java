@@ -28,17 +28,17 @@ public class FilterShippingMethodTest {
 
     @Before
     public void setUp() throws Exception {
-
         this.filterShippingMethod = new FilterShippingMethod();
         this.warehouseMock = PowerMockito.mock(Warehouse.class);
 
-        when(warehouseMock.getWarehouseName()).thenReturn("warehouseName");
+        when(warehouseMock.getWarehouseName()).thenReturn("BRAZIL");
 }
 
     @Test
     public void shouldReturnBrazilInventoryItemWhenUpsShippingMethodIsPassed() throws Exception {
 
-        Request request = Request.builder()
+        Request request = Request
+                .builder()
                 .inventoryItems(singletonList(BRAZIL_MOUSE_2))
                 .warehouseList(asList(BRAZIL_WAREHOUSE, CHILE_WAREHOUSE))
                 .shippingMethodMethod(ShippingMethod.UPS)
@@ -54,7 +54,8 @@ public class FilterShippingMethodTest {
     @Test
     public void shouldCallGetWarehouseNameMethod() throws Exception {
 
-        Request request = Request.builder()
+        Request request = Request
+                .builder()
                 .inventoryItems(singletonList(BRAZIL_MOUSE_2))
                 .warehouseList(singletonList(warehouseMock))
                 .shippingMethodMethod(ShippingMethod.UPS)
@@ -63,5 +64,20 @@ public class FilterShippingMethodTest {
 
         filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
         verify(warehouseMock, times(1)).getWarehouseName();
+    }
+
+    @Test
+    public void shouldCallGetShippingListMethod() throws Exception {
+
+        Request request = Request
+                .builder()
+                .inventoryItems(singletonList(BRAZIL_MOUSE_2))
+                .warehouseList(singletonList(warehouseMock))
+                .shippingMethodMethod(ShippingMethod.UPS)
+                .orderItemsList(singletonList(null))
+                .strategy(new NoneInventoryStrategy()).build();
+
+        filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
+        verify(warehouseMock, times(1)).getShippingMethodList();
     }
 }
