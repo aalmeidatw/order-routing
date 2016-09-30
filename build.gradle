@@ -27,6 +27,8 @@ task(integration_test) << {
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.14'
     compile "org.projectlombok:lombok:1.16.10"
+    compile group: 'org.powermock', name: 'powermock-api-mockito', version: '1.6.4'
+    compile group: 'org.powermock', name: 'powermock-module-junit4', version: '1.6.4'
     testCompile "org.mockito:mockito-core:1.+"
     testCompile 'junit:junit:4.12'
 }
