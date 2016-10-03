@@ -2,33 +2,38 @@ package algorithm;
 
 
 import exception.ProductIsNotAvailableException;
-import lombok.Value;
 import model.InventoryItem;
-import model.WarehouseFulfill;
-import model.map.CapacityListMap;
-import model.map.RequestListMap;
 import model.OrderItem;
+import model.WarehouseFulfillOrder;
 import model.dto.Request;
 import model.dto.Response;
 import model.filter.FilterShippingMethod;
+import model.map.CapacityListMap;
+import model.map.RequestListMap;
 import strategy.model.Strategy;
+
 import java.util.ArrayList;
 import java.util.List;
 
-@Value
 public class OrderAlgorithm {
-    private FilterShippingMethod filterShippingMethod;
+    private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
     private RequestListMap requestMap;
-    private CapacityListMap capacityMap;
+    private CapacityListMap capacityMap = new CapacityListMap();
     private static String ORDER_NOT_COMPLETED = "Order cannot be fulfilled";
+
+    public OrderAlgorithm(FilterShippingMethod filterShippingMethod, RequestListMap requestMap, CapacityListMap capacityMap) {
+        this.filterShippingMethod = filterShippingMethod;
+        this.requestMap = requestMap;
+        this.capacityMap = capacityMap;
+    }
 
     public Response execute(Request request) throws Exception{
 
-        requestMap.createRequestMap(request.getOrderItemsList());
+        this.requestMap.createRequestMap(request.getOrderItemsList());
         capacityMap.createCapacityMap(request.getWarehouseList());
 
         List<InventoryItem> filtredInventoryList = getFiltredInventoryList(request);
-        List<WarehouseFulfill> warehousesFulfillOrderlList = new ArrayList<>();
+        List<WarehouseFulfillOrder> warehousesFulfillOrderlList = new ArrayList<>();
 
         for (OrderItem item : request.getOrderItemsList()) {
 
@@ -48,8 +53,8 @@ public class OrderAlgorithm {
 
                     int newCapacity = getNewCapacityValue(inventory, capacityMap, valueToInsertInShippingList);
 
-                    updateRequestAndCapacityMap(requestMap, capacityMap, inventory, item, Math.max(0, neededQuantity), newCapacity);
-                    warehousesFulfillOrderlList.add(new WarehouseFulfill( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
+                    updateRequestAndCapacityMap(capacityMap, inventory, item, Math.max(0, neededQuantity), newCapacity);
+                    warehousesFulfillOrderlList.add(new WarehouseFulfillOrder( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
                 }
             }
         }
@@ -68,11 +73,11 @@ public class OrderAlgorithm {
         return strategy.executeStrategy(inventoryListFiltredByShippingMethod, request.getWarehouseList());
     }
 
-    protected void updateRequestAndCapacityMap(RequestListMap requestMap, CapacityListMap capacityMap,
+    protected void updateRequestAndCapacityMap(CapacityListMap capacityMap,
                                                InventoryItem inventoryItem, OrderItem item,
                                                int neededQuantity, int newCapacity) {
 
-        requestMap.updateProductQuantity(item.getProductName(), neededQuantity);
+        this.requestMap.updateProductQuantity(item.getProductName(), neededQuantity);
         capacityMap.updateCapacityQuantity(inventoryItem.getWarehouseName(), newCapacity );
     }
 

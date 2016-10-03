@@ -5,7 +5,7 @@ import exception.ProductIsNotAvailableException;
 import model.InventoryItem;
 import model.OrderItem;
 import model.ShippingMethod;
-import model.WarehouseFulfill;
+import model.WarehouseFulfillOrder;
 import model.dto.Request;
 import model.dto.Response;
 import model.filter.FilterShippingMethod;
@@ -18,6 +18,7 @@ import strategy.LargestCapacityStrategy;
 import strategy.LargestInventoryStrategy;
 import strategy.NoneInventoryStrategy;
 import strategy.ShortestInventoryStrategy;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.core.Is.is;
@@ -28,6 +29,8 @@ public class AcceptanceTests {
 
     @Before
     public void setUp() throws Exception {
+
+        //this.orderAlgorithm = new OrderAlgorithm();
         this.orderAlgorithm = new OrderAlgorithm(
                 new FilterShippingMethod(),
                 new RequestListMap(),
@@ -46,7 +49,7 @@ public class AcceptanceTests {
                 .orderItemsList(singletonList(new OrderItem("Keyboard",2)))
                 .strategy(new NoneInventoryStrategy()).build();
 
-        Response expected = new Response(singletonList(new WarehouseFulfill("Brazil", "Keyboard" , 2)));
+        Response expected = new Response(singletonList(new WarehouseFulfillOrder("Brazil", "Keyboard" , 2)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -64,7 +67,7 @@ public class AcceptanceTests {
                 .orderItemsList(singletonList(new OrderItem("Mouse",1)))
                 .strategy(new NoneInventoryStrategy()).build();
 
-        Response expected = new Response(singletonList(new WarehouseFulfill("South Africa", "Mouse" , 1)));
+        Response expected = new Response(singletonList(new WarehouseFulfillOrder("South Africa", "Mouse" , 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -86,9 +89,9 @@ public class AcceptanceTests {
                 .strategy(new NoneInventoryStrategy()).build();
 
         Response expected = new Response(asList(
-                new WarehouseFulfill("Canada", "Mouse", 4),
-                new WarehouseFulfill("Canada", "Keyboard", 1),
-                new WarehouseFulfill("France", "Keyboard", 2)));
+                new WarehouseFulfillOrder("Canada", "Mouse", 4),
+                new WarehouseFulfillOrder("Canada", "Keyboard", 1),
+                new WarehouseFulfillOrder("France", "Keyboard", 2)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -112,8 +115,8 @@ public class AcceptanceTests {
                 .strategy(new LargestInventoryStrategy()).build();
 
         Response expected = new Response(asList(
-                new WarehouseFulfill("Brazil", "Mouse", 1),
-                new WarehouseFulfill("Brazil", "Keyboard", 1)));
+                new WarehouseFulfillOrder("Brazil", "Mouse", 1),
+                new WarehouseFulfillOrder("Brazil", "Keyboard", 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -136,8 +139,8 @@ public class AcceptanceTests {
                 .strategy(new ShortestInventoryStrategy()).build();
 
         Response expected = new Response(asList(
-                new WarehouseFulfill("China", "Mouse", 1),
-                new WarehouseFulfill("France", "Keyboard", 1)));
+                new WarehouseFulfillOrder("China", "Mouse", 1),
+                new WarehouseFulfillOrder("France", "Keyboard", 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -160,8 +163,8 @@ public class AcceptanceTests {
                 .strategy(new LargestCapacityStrategy()).build();
 
         Response expected = new Response(asList(
-                new WarehouseFulfill("China", "Mouse", 1),
-                new WarehouseFulfill("Brazil", "Keyboard", 1)));
+                new WarehouseFulfillOrder("China", "Mouse", 1),
+                new WarehouseFulfillOrder("Brazil", "Keyboard", 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));
@@ -189,12 +192,12 @@ public class AcceptanceTests {
                 .strategy(new NoneInventoryStrategy()).build();
 
         Response expected = new Response(asList(
-                    new WarehouseFulfill("Canada", "Mouse", 2),
-                    new WarehouseFulfill("Brazil", "Mouse", 2),
-                    new WarehouseFulfill("South Africa", "Mouse", 2),
-                    new WarehouseFulfill("Brazil", "Keyboard", 3),
-                    new WarehouseFulfill("South Africa", "Monitor", 3),
-                    new WarehouseFulfill("South Africa", "Camera", 1)));
+                    new WarehouseFulfillOrder("Canada", "Mouse", 2),
+                    new WarehouseFulfillOrder("Brazil", "Mouse", 2),
+                    new WarehouseFulfillOrder("South Africa", "Mouse", 2),
+                    new WarehouseFulfillOrder("Brazil", "Keyboard", 3),
+                    new WarehouseFulfillOrder("South Africa", "Monitor", 3),
+                    new WarehouseFulfillOrder("South Africa", "Camera", 1)));
 
         Response response = orderAlgorithm.execute(request);
         assertThat(response, is(expected));

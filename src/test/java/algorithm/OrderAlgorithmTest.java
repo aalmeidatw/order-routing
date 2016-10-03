@@ -69,7 +69,11 @@ public class OrderAlgorithmTest {
     @Test
     public void shouldCallUpdateRequestMap() throws Exception {
 
-        orderAlgorithm.updateRequestAndCapacityMap( requestMapMock, capacityListMapMock,
+        this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
+                    requestMapMock,
+                    new CapacityListMap());
+
+        orderAlgorithm.updateRequestAndCapacityMap(capacityListMapMock,
                                                     new InventoryItem("Brazil", "Mouse", 2),
                                                     new OrderItem("Mouse", 0),
                                                     MOUSE_NEEDED, NEW_CAPACITY);
@@ -80,7 +84,7 @@ public class OrderAlgorithmTest {
     @Test
     public void shouldCallUpdateCapacityMap() throws Exception {
 
-        orderAlgorithm.updateRequestAndCapacityMap( requestMapMock, capacityListMapMock,
+        orderAlgorithm.updateRequestAndCapacityMap( capacityListMapMock,
                                                     new InventoryItem("Brazil", "Mouse", 2),
                                                     new OrderItem("Mouse", 0),
                                                     MOUSE_NEEDED, NEW_CAPACITY);
@@ -111,7 +115,7 @@ public class OrderAlgorithmTest {
                 .strategy(new NoneInventoryStrategy()).build();
 
         Response actual = orderAlgorithm.execute(request);
-        Response expected = new Response(singletonList(new WarehouseFulfill("Canada", "Mouse", 2)));
+        Response expected = new Response(singletonList(new WarehouseFulfillOrder("Canada", "Mouse", 2)));
 
         assertThat(actual, is(expected));
     }
