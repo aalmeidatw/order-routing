@@ -73,8 +73,7 @@ public class OrderAlgorithmTest {
                     requestMapMock,
                     new CapacityListMap());
 
-        orderAlgorithm.updateRequestAndCapacityMap(capacityListMapMock,
-                                                    new InventoryItem("Brazil", "Mouse", 2),
+        orderAlgorithm.updateRequestAndCapacityMap( new InventoryItem("Brazil", "Mouse", 2),
                                                     new OrderItem("Mouse", 0),
                                                     MOUSE_NEEDED, NEW_CAPACITY);
 
@@ -84,8 +83,11 @@ public class OrderAlgorithmTest {
     @Test
     public void shouldCallUpdateCapacityMap() throws Exception {
 
-        orderAlgorithm.updateRequestAndCapacityMap( capacityListMapMock,
-                                                    new InventoryItem("Brazil", "Mouse", 2),
+        this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
+                requestMapMock,
+                capacityListMapMock);
+
+        orderAlgorithm.updateRequestAndCapacityMap( new InventoryItem("Brazil", "Mouse", 2),
                                                     new OrderItem("Mouse", 0),
                                                     MOUSE_NEEDED, NEW_CAPACITY);
 

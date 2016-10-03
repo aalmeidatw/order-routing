@@ -18,7 +18,7 @@ import java.util.List;
 public class OrderAlgorithm {
     private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
     private RequestListMap requestMap;
-    private CapacityListMap capacityMap = new CapacityListMap();
+    private CapacityListMap capacityMap;
     private static String ORDER_NOT_COMPLETED = "Order cannot be fulfilled";
 
     public OrderAlgorithm(FilterShippingMethod filterShippingMethod, RequestListMap requestMap, CapacityListMap capacityMap) {
@@ -30,7 +30,7 @@ public class OrderAlgorithm {
     public Response execute(Request request) throws Exception{
 
         this.requestMap.createRequestMap(request.getOrderItemsList());
-        capacityMap.createCapacityMap(request.getWarehouseList());
+        this.capacityMap.createCapacityMap(request.getWarehouseList());
 
         List<InventoryItem> filtredInventoryList = getFiltredInventoryList(request);
         List<WarehouseFulfillOrder> warehousesFulfillOrderlList = new ArrayList<>();
@@ -41,7 +41,7 @@ public class OrderAlgorithm {
                 int valueToInsertInShippingList;
                 int neededQuantity;
 
-                if (isSameProductNameAndQuantityNeededIsMoreThanZero(requestMap, item, inventory, capacityMap)) {
+                if (isSameProductNameAndQuantityNeededIsMoreThanZero(item, inventory)) {
 
                      valueToInsertInShippingList = Math.min(requestMap.getProductQuantity(item.getProductName()), inventory.getQuantityAvailable());
                      neededQuantity = requestMap.getProductQuantity(item.getProductName()) - inventory.getQuantityAvailable();
@@ -53,7 +53,7 @@ public class OrderAlgorithm {
 
                     int newCapacity = getNewCapacityValue(inventory, capacityMap, valueToInsertInShippingList);
 
-                    updateRequestAndCapacityMap(capacityMap, inventory, item, Math.max(0, neededQuantity), newCapacity);
+                    updateRequestAndCapacityMap(inventory, item, Math.max(0, neededQuantity), newCapacity);
                     warehousesFulfillOrderlList.add(new WarehouseFulfillOrder( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
                 }
             }
@@ -73,20 +73,18 @@ public class OrderAlgorithm {
         return strategy.executeStrategy(inventoryListFiltredByShippingMethod, request.getWarehouseList());
     }
 
-    protected void updateRequestAndCapacityMap(CapacityListMap capacityMap,
-                                               InventoryItem inventoryItem, OrderItem item,
+    protected void updateRequestAndCapacityMap(InventoryItem inventoryItem, OrderItem item,
                                                int neededQuantity, int newCapacity) {
 
         this.requestMap.updateProductQuantity(item.getProductName(), neededQuantity);
-        capacityMap.updateCapacityQuantity(inventoryItem.getWarehouseName(), newCapacity );
+        this.capacityMap.updateCapacityQuantity(inventoryItem.getWarehouseName(), newCapacity );
     }
 
-    private boolean isSameProductNameAndQuantityNeededIsMoreThanZero(RequestListMap requestMap, OrderItem item,
-                                                                     InventoryItem inventory, CapacityListMap capacityMap) {
+    private boolean isSameProductNameAndQuantityNeededIsMoreThanZero(OrderItem item, InventoryItem inventory) {
 
         return inventory.getProductName().equals(item.getProductName())
-                && (requestMap.isMoreThanZero(item.getProductName()))
-                && (capacityMap.isMoreThanZero(inventory.getWarehouseName()));
+                && (this.requestMap.isMoreThanZero(item.getProductName()))
+                && (this.capacityMap.isMoreThanZero(inventory.getWarehouseName()));
     }
 
     protected int getNewCapacityValue(InventoryItem  inventory, CapacityListMap capacityMap, int quantityNeeded) {
