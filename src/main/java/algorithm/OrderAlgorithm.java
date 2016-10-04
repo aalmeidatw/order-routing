@@ -19,7 +19,7 @@ public class OrderAlgorithm {
     private FilterShippingMethod filterShippingMethod;
     private RequestListMap requestMap;
     private CapacityListMap capacityMap;
-    private static String ORDER_NOT_COMPLETED = "Order cannot be fulfilled";
+    private final static String ORDER_NOT_COMPLETED = "Order cannot be fulfilled";
     private List<WarehouseFulfillOrder> warehousesFulfillOrderList = new ArrayList<>();
 
     public OrderAlgorithm(FilterShippingMethod filterShippingMethod, RequestListMap requestMap, CapacityListMap capacityMap) {
