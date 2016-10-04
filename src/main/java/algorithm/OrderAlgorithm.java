@@ -10,7 +10,6 @@ import model.dto.Response;
 import model.filter.FilterShippingMethod;
 import model.map.CapacityListMap;
 import model.map.RequestListMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,6 @@ public class OrderAlgorithm {
     private RequestListMap requestMap;
     private CapacityListMap capacityMap;
     private static String ORDER_NOT_COMPLETED = "Order cannot be fulfilled";
-    private List<InventoryItem> filtredInventoryList;
     private List<WarehouseFulfillOrder> warehousesFulfillOrderList = new ArrayList<>();
 
     public OrderAlgorithm(FilterShippingMethod filterShippingMethod, RequestListMap requestMap, CapacityListMap capacityMap) {
@@ -31,11 +29,12 @@ public class OrderAlgorithm {
     public Response execute(Request request) throws Exception{
         createMapsAndFiltredInventoryList(request);
 
+        int valueToInsertInShippingList;
+        int neededQuantity;
+
         for (OrderItem item : request.getOrderItemsList()) {
 
-            for (InventoryItem inventory : filtredInventoryList) {
-                int valueToInsertInShippingList;
-                int neededQuantity;
+            for (InventoryItem inventory : filterShippingMethod.getFiltredInventoryList()) {
 
                 if (isSameProductNameAndQuantityNeededIsMoreThanZero(item, inventory)) {
 
@@ -59,13 +58,14 @@ public class OrderAlgorithm {
         if(!requestMap.isMapCompleted()){
             throw new ProductIsNotAvailableException(ORDER_NOT_COMPLETED);
         }
+
         return new Response(warehousesFulfillOrderList);
     }
 
-    private void createMapsAndFiltredInventoryList(Request request) {
+    protected void createMapsAndFiltredInventoryList(Request request) {
         this.requestMap.createRequestMap(request.getOrderItemsList());
         this.capacityMap.createCapacityMap(request.getWarehouseList());
-        this.filtredInventoryList = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
+        this.filterShippingMethod.createInventoryListFiltredByShippingMethodRequest(request);
     }
 
     protected void updateRequestAndCapacityMap(InventoryItem inventoryItem, OrderItem item,

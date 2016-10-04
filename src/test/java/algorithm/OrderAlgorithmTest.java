@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import repository.Repository;
-import strategy.LargestCapacityStrategy;
 import strategy.NoneInventoryStrategy;
 import strategy.model.Strategy;
 
@@ -31,6 +30,9 @@ public class OrderAlgorithmTest {
     private CapacityListMap capacityMap;
 
     @Mock
+    FilterShippingMethod filterShippingMethodMock;
+
+    @Mock
     Strategy strategyMock;
 
     @Mock
@@ -39,8 +41,6 @@ public class OrderAlgorithmTest {
     @Mock
     CapacityListMap capacityListMapMock;
 
-    @Mock
-    FilterShippingMethod filterShippingMethodMock;
 
     @Before
     public void setUp() throws Exception {
@@ -71,6 +71,21 @@ public class OrderAlgorithmTest {
     }
 
     @Test
+    public void shouldCallFilterShippingMethod() throws Exception {
+        OrderAlgorithm orderAlgorithmMock = new OrderAlgorithm(filterShippingMethodMock, requestMapMock, capacityListMapMock);
+
+        Request request = Request.builder()
+                .inventoryItems(asList(new InventoryItem("Brazil", "Keyboard", 2), new InventoryItem("France", "Mouse", 2)))
+                .warehouseList(new Repository().getWarehouseRepository())
+                .shippingMethodMethod(ShippingMethod.DHL)
+                .orderItemsList(singletonList(new OrderItem("Keyboard",2)))
+                .strategy(new NoneInventoryStrategy()).build();
+
+        orderAlgorithmMock.createMapsAndFiltredInventoryList(request);
+        verify(filterShippingMethodMock, times(1)).createInventoryListFiltredByShippingMethodRequest(request);
+    }
+
+    @Test
     public void shouldCallUpdateRequestMap() throws Exception {
 
         this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
@@ -81,25 +96,6 @@ public class OrderAlgorithmTest {
                                                     MOUSE_NEEDED, NEW_CAPACITY);
 
         verify(requestMapMock, times(1)).updateProductQuantity("Mouse", 2);
-    }
-
-    @Test(expected = ProductIsNotAvailableException.class)
-    public void shouldCallFilterShippingMethod() throws Exception {
-
-        OrderAlgorithm orderAlgorithmMock = new OrderAlgorithm(filterShippingMethodMock, new RequestListMap(), new CapacityListMap());
-
-        Request request = Request.builder()
-                .inventoryItems(asList(new InventoryItem("Brazil", "Keyboard", 2), new InventoryItem("France", "Mouse", 2)))
-                .warehouseList(new Repository().getWarehouseRepository())
-                .shippingMethodMethod(ShippingMethod.DHL)
-                .orderItemsList(singletonList(new OrderItem("Keyboard",2)))
-                .strategy(new LargestCapacityStrategy()).build();
-
-        when(filterShippingMethodMock.getInventoryListFiltredByShippingMethodRequest(request)).thenReturn(anyListOf(InventoryItem.class));
-
-        orderAlgorithmMock.execute(request);
-
-        verify(filterShippingMethodMock, times(1)).getInventoryListFiltredByShippingMethodRequest(request);
     }
 
     @Test

@@ -1,4 +1,5 @@
 package model.filter;
+
 import model.InventoryItem;
 import model.ShippingMethod;
 import model.Warehouse;
@@ -10,10 +11,12 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import strategy.NoneInventoryStrategy;
+
 import java.util.List;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -32,7 +35,7 @@ public class FilterShippingMethodTest {
         this.warehouseMock = PowerMockito.mock(Warehouse.class);
 
         when(warehouseMock.getWarehouseName()).thenReturn("BRAZIL");
-}
+    }
 
     @Test
     public void shouldReturnBrazilInventoryItemWhenUpsShippingMethodIsPassed() throws Exception {
@@ -45,11 +48,13 @@ public class FilterShippingMethodTest {
                 .orderItemsList(singletonList(null))
                 .strategy(new NoneInventoryStrategy()).build();
 
-        List<InventoryItem> response = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
+        filterShippingMethod.createInventoryListFiltredByShippingMethodRequest(request);
+
+        List<InventoryItem> response = filterShippingMethod.getFiltredInventoryList();
         List<InventoryItem> actual = singletonList(BRAZIL_MOUSE_2);
 
-        assertThat(actual, is(response));
-     }
+       assertThat(actual, is(response));
+    }
 
     @Test
     public void shouldCallGetWarehouseNameMethod() throws Exception {
@@ -62,7 +67,7 @@ public class FilterShippingMethodTest {
                 .orderItemsList(singletonList(null))
                 .strategy(new NoneInventoryStrategy()).build();
 
-        filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
+        filterShippingMethod.createInventoryListFiltredByShippingMethodRequest(request);
         verify(warehouseMock, times(1)).getWarehouseName();
     }
 
@@ -77,7 +82,7 @@ public class FilterShippingMethodTest {
                 .orderItemsList(singletonList(null))
                 .strategy(new NoneInventoryStrategy()).build();
 
-        filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
+        filterShippingMethod.createInventoryListFiltredByShippingMethodRequest(request);
         verify(warehouseMock, times(1)).getShippingMethodList();
     }
 }
