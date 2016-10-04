@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import repository.Repository;
+import strategy.LargestCapacityStrategy;
 import strategy.NoneInventoryStrategy;
 import strategy.model.Strategy;
 
@@ -37,6 +38,9 @@ public class OrderAlgorithmTest {
 
     @Mock
     CapacityListMap capacityListMapMock;
+
+    @Mock
+    FilterShippingMethod filterShippingMethodMock;
 
     @Before
     public void setUp() throws Exception {
@@ -70,8 +74,7 @@ public class OrderAlgorithmTest {
     public void shouldCallUpdateRequestMap() throws Exception {
 
         this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
-                    requestMapMock,
-                    new CapacityListMap());
+                    requestMapMock, new CapacityListMap());
 
         orderAlgorithm.updateRequestAndCapacityMap( new InventoryItem("Brazil", "Mouse", 2),
                                                     new OrderItem("Mouse", 0),
@@ -80,31 +83,38 @@ public class OrderAlgorithmTest {
         verify(requestMapMock, times(1)).updateProductQuantity("Mouse", 2);
     }
 
+    @Test(expected = ProductIsNotAvailableException.class)
+    public void shouldCallFilterShippingMethod() throws Exception {
+
+        OrderAlgorithm orderAlgorithmMock = new OrderAlgorithm(filterShippingMethodMock, new RequestListMap(), new CapacityListMap());
+
+        Request request = Request.builder()
+                .inventoryItems(asList(new InventoryItem("Brazil", "Keyboard", 2), new InventoryItem("France", "Mouse", 2)))
+                .warehouseList(new Repository().getWarehouseRepository())
+                .shippingMethodMethod(ShippingMethod.DHL)
+                .orderItemsList(singletonList(new OrderItem("Keyboard",2)))
+                .strategy(new LargestCapacityStrategy()).build();
+
+        when(filterShippingMethodMock.getInventoryListFiltredByShippingMethodRequest(request)).thenReturn(anyListOf(InventoryItem.class));
+
+        orderAlgorithmMock.execute(request);
+
+        verify(filterShippingMethodMock, times(1)).getInventoryListFiltredByShippingMethodRequest(request);
+    }
+
     @Test
     public void shouldCallUpdateCapacityMap() throws Exception {
 
         this.orderAlgorithm = new OrderAlgorithm( new FilterShippingMethod(),
-                requestMapMock,
-                capacityListMapMock);
+                requestMapMock, capacityListMapMock);
 
         orderAlgorithm.updateRequestAndCapacityMap( new InventoryItem("Brazil", "Mouse", 2),
                                                     new OrderItem("Mouse", 0),
                                                     MOUSE_NEEDED, NEW_CAPACITY);
 
-        verify(capacityListMapMock, times(1)).updateCapacityQuantity("Brazil", 0);
+        verify(capacityListMapMock).updateCapacityQuantity("Brazil", 0);
     }
 
-    @Test
-    public void shouldSubtractQuantityNeededAndReturnOneValue() throws Exception {
-        int quantityNeeded = 4;
-        assertThat(orderAlgorithm.getNewCapacityValue(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (1));
-    }
-
-    @Test
-    public void shouldReturnZeroWhenQuantityNeededIsMoreThanCapacityValue() throws Exception {
-        int quantityNeeded = 7;
-        assertThat(orderAlgorithm.getNewCapacityValue(new InventoryItem("Canada", null, 0), capacityMap, quantityNeeded ), is (0));
-    }
 
     @Test(expected = ProductIsNotAvailableException.class)
     public void shouldReturnQuantityAvailableThenWarehouseCapacityIsMoreThanQuantityNeeded() throws Exception {

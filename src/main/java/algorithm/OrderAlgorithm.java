@@ -10,13 +10,12 @@ import model.dto.Response;
 import model.filter.FilterShippingMethod;
 import model.map.CapacityListMap;
 import model.map.RequestListMap;
-import strategy.model.Strategy;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderAlgorithm {
-    private FilterShippingMethod filterShippingMethod = new FilterShippingMethod();
+    private FilterShippingMethod filterShippingMethod;
     private RequestListMap requestMap;
     private CapacityListMap capacityMap;
     private static String ORDER_NOT_COMPLETED = "Order cannot be fulfilled";
@@ -32,7 +31,7 @@ public class OrderAlgorithm {
         this.requestMap.createRequestMap(request.getOrderItemsList());
         this.capacityMap.createCapacityMap(request.getWarehouseList());
 
-        List<InventoryItem> filtredInventoryList = getFiltredInventoryList(request);
+        List<InventoryItem> filtredInventoryList = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
         List<WarehouseFulfillOrder> warehousesFulfillOrderlList = new ArrayList<>();
 
         for (OrderItem item : request.getOrderItemsList()) {
@@ -51,26 +50,17 @@ public class OrderAlgorithm {
                             neededQuantity = requestMap.getProductQuantity(item.getProductName()) - valueToInsertInShippingList;
                         }
 
-                    int newCapacity = getNewCapacityValue(inventory, capacityMap, valueToInsertInShippingList);
+                    int newCapacity = getNewCapacityValue(inventory, valueToInsertInShippingList);
 
                     updateRequestAndCapacityMap(inventory, item, Math.max(0, neededQuantity), newCapacity);
                     warehousesFulfillOrderlList.add(new WarehouseFulfillOrder( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
                 }
             }
         }
-
         if(!requestMap.isMapCompleted()){
             throw new ProductIsNotAvailableException(ORDER_NOT_COMPLETED);
         }
-
         return new Response(warehousesFulfillOrderlList);
-    }
-
-    private List<InventoryItem> getFiltredInventoryList(Request request){
-        Strategy strategy = request.getStrategy();
-        List<InventoryItem> inventoryListFiltredByShippingMethod = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
-
-        return strategy.executeStrategy(inventoryListFiltredByShippingMethod, request.getWarehouseList());
     }
 
     protected void updateRequestAndCapacityMap(InventoryItem inventoryItem, OrderItem item,
@@ -87,8 +77,8 @@ public class OrderAlgorithm {
                 && (this.capacityMap.isMoreThanZero(inventory.getWarehouseName()));
     }
 
-    protected int getNewCapacityValue(InventoryItem  inventory, CapacityListMap capacityMap, int quantityNeeded) {
-        int capacityValue = capacityMap.getProductQuantity(inventory.getWarehouseName());
+    private int getNewCapacityValue(InventoryItem  inventory, int quantityNeeded) {
+        int capacityValue = this.capacityMap.getProductQuantity(inventory.getWarehouseName());
         return Math.max(0, capacityValue - quantityNeeded);
     }
 }

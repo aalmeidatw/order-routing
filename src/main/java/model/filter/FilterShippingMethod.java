@@ -11,11 +11,13 @@ public class FilterShippingMethod {
 
     public List<InventoryItem> getInventoryListFiltredByShippingMethodRequest(Request request){
 
-        return request.getInventoryItems().stream()
+        List<InventoryItem > filtredList = request.getInventoryItems().stream()
                                 .filter(inventoryItem -> isShippingMethodSuported(inventoryItem,
                                         request.getShippingMethodMethod(),
                                         request.getWarehouseList()))
                                 .collect(Collectors.toList());
+
+        return request.getStrategy().executeStrategy(filtredList, request.getWarehouseList());
      }
 
     private boolean isShippingMethodSuported(InventoryItem inventoryItem,
