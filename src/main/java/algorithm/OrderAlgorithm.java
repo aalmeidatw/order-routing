@@ -19,6 +19,8 @@ public class OrderAlgorithm {
     private RequestListMap requestMap;
     private CapacityListMap capacityMap;
     private static String ORDER_NOT_COMPLETED = "Order cannot be fulfilled";
+    private List<InventoryItem> filtredInventoryList;
+    private List<WarehouseFulfillOrder> warehousesFulfillOrderList = new ArrayList<>();
 
     public OrderAlgorithm(FilterShippingMethod filterShippingMethod, RequestListMap requestMap, CapacityListMap capacityMap) {
         this.filterShippingMethod = filterShippingMethod;
@@ -27,12 +29,7 @@ public class OrderAlgorithm {
     }
 
     public Response execute(Request request) throws Exception{
-
-        this.requestMap.createRequestMap(request.getOrderItemsList());
-        this.capacityMap.createCapacityMap(request.getWarehouseList());
-
-        List<InventoryItem> filtredInventoryList = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
-        List<WarehouseFulfillOrder> warehousesFulfillOrderlList = new ArrayList<>();
+        createMapsAndFiltredInventoryList(request);
 
         for (OrderItem item : request.getOrderItemsList()) {
 
@@ -53,14 +50,20 @@ public class OrderAlgorithm {
                     int newCapacity = getNewCapacityValue(inventory, valueToInsertInShippingList);
 
                     updateRequestAndCapacityMap(inventory, item, Math.max(0, neededQuantity), newCapacity);
-                    warehousesFulfillOrderlList.add(new WarehouseFulfillOrder( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
+                    warehousesFulfillOrderList.add(new WarehouseFulfillOrder( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
                 }
             }
         }
         if(!requestMap.isMapCompleted()){
             throw new ProductIsNotAvailableException(ORDER_NOT_COMPLETED);
         }
-        return new Response(warehousesFulfillOrderlList);
+        return new Response(warehousesFulfillOrderList);
+    }
+
+    private void createMapsAndFiltredInventoryList(Request request) {
+        this.requestMap.createRequestMap(request.getOrderItemsList());
+        this.capacityMap.createCapacityMap(request.getWarehouseList());
+        this.filtredInventoryList = filterShippingMethod.getInventoryListFiltredByShippingMethodRequest(request);
     }
 
     protected void updateRequestAndCapacityMap(InventoryItem inventoryItem, OrderItem item,
