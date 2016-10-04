@@ -46,11 +46,13 @@ public class OrderAlgorithm {
                             valueToInsertInShippingList =  Math.min(valueToInsertInShippingList, capacityMap.getProductQuantity(inventory.getWarehouseName()));
                             neededQuantity = requestMap.getProductQuantity(item.getProductName()) - valueToInsertInShippingList;
                         }
-
                     int newCapacity = getNewCapacityValue(inventory, valueToInsertInShippingList);
-
                     updateRequestAndCapacityMap(inventory, item, Math.max(0, neededQuantity), newCapacity);
-                    warehousesFulfillOrderList.add(new WarehouseFulfillOrder( inventory.getWarehouseName(), inventory.getProductName(), valueToInsertInShippingList));
+
+                    warehousesFulfillOrderList.add(WarehouseFulfillOrder.builder()
+                            .warehouseName(inventory.getWarehouseName())
+                            .productName(inventory.getProductName())
+                            .quantity(valueToInsertInShippingList).build());
                 }
             }
         }
