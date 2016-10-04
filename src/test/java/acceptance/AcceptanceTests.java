@@ -30,7 +30,6 @@ public class AcceptanceTests {
     @Before
     public void setUp() throws Exception {
 
-        //this.orderAlgorithm = new OrderAlgorithm();
         this.orderAlgorithm = new OrderAlgorithm(
                 new FilterShippingMethod(),
                 new RequestListMap(),
@@ -214,7 +213,6 @@ public class AcceptanceTests {
                 .shippingMethodMethod(ShippingMethod.FEDEX)
                 .orderItemsList(singletonList(new OrderItem("Mouse", 5)))
                 .strategy(new NoneInventoryStrategy()).build();
-
 
         orderAlgorithm.execute(request);
     }

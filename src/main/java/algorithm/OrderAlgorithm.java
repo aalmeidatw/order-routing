@@ -10,8 +10,10 @@ import model.dto.Response;
 import model.filter.FilterShippingMethod;
 import model.map.CapacityListMap;
 import model.map.RequestListMap;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class OrderAlgorithm {
     private FilterShippingMethod filterShippingMethod;
